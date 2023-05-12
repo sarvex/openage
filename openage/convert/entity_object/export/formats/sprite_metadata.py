@@ -139,11 +139,7 @@ class SpriteMetadata(DataDefinition):
         self.scalefactor = float(factor)
 
     def dump(self) -> str:
-        output_str = ""
-
-        # header
-        output_str += "# openage sprite definition file\n\n"
-
+        output_str = "" + "# openage sprite definition file\n\n"
         # version
         output_str += f"version {FORMAT_VERSION}\n\n"
 

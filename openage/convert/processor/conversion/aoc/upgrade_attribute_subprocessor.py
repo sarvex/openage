@@ -54,8 +54,6 @@ class AoCUpgradeAttributeSubprocessor:
         head_unit_id = line.get_head_unit_id()
         dataset = line.data
 
-        patches = []
-
         obj_id = converter_group.get_id()
         if isinstance(converter_group, GenieTechEffectBundleGroup):
             tech_lookup_dict = internal_name_lookups.get_tech_lookups(dataset.game_version)
@@ -117,9 +115,7 @@ class AoCUpgradeAttributeSubprocessor:
         converter_group.add_raw_api_object(nyan_patch_raw_api_object)
 
         wrapper_forward_ref = ForwardRef(converter_group, wrapper_ref)
-        patches.append(wrapper_forward_ref)
-
-        return patches
+        return [wrapper_forward_ref]
 
     @staticmethod
     def armor_upgrade(
@@ -164,8 +160,8 @@ class AoCUpgradeAttributeSubprocessor:
         else:
             # Sign is for armor amount
             value *= -1
-            armor_class = int(value) >> 8
-            armor_amount = int(value) & 0x0F
+            armor_class = value >> 8
+            armor_amount = value & 0x0F
             armor_amount *= -1
 
         name_lookup_dict = internal_name_lookups.get_entity_lookups(dataset.game_version)
@@ -174,13 +170,12 @@ class AoCUpgradeAttributeSubprocessor:
         game_entity_name = name_lookup_dict[head_unit_id][0]
         class_name = armor_lookup_dict[armor_class]
 
-        if line.has_armor(armor_class):
-            patch_target_ref = f"{game_entity_name}.Resistance.{class_name}.BlockAmount"
-            patch_target_forward_ref = ForwardRef(line, patch_target_ref)
-
-        else:
+        if not line.has_armor(armor_class):
             # TODO: Create new attack resistance
             return patches
+
+        patch_target_ref = f"{game_entity_name}.Resistance.{class_name}.BlockAmount"
+        patch_target_forward_ref = ForwardRef(line, patch_target_ref)
 
         # Wrapper
         wrapper_name = f"Change{game_entity_name}{class_name}ResistanceWrapper"
@@ -292,11 +287,9 @@ class AoCUpgradeAttributeSubprocessor:
 
             patch_target_ref = (f"{game_entity_name}.ShootProjectile.Projectile0."
                                 f"Attack.Batch.{class_name}.ChangeAmount")
-            patch_target_forward_ref = ForwardRef(line, patch_target_ref)
-
         else:
             patch_target_ref = f"{game_entity_name}.Attack.Batch.{class_name}.ChangeAmount"
-            patch_target_forward_ref = ForwardRef(line, patch_target_ref)
+        patch_target_forward_ref = ForwardRef(line, patch_target_ref)
 
         if not line.has_attack(armor_class):
             # TODO: Create new attack effect
@@ -382,15 +375,7 @@ class AoCUpgradeAttributeSubprocessor:
         if value == 0:
             target_mode = dataset.nyan_api_objects["engine.util.target_mode.type.CurrentPosition"]
 
-        elif value == 1:
-            target_mode = dataset.nyan_api_objects["engine.util.target_mode.type.ExpectedPosition"]
-
-        elif value == 2:
-            # No Ballistics, only for Arambai
-            target_mode = dataset.nyan_api_objects["engine.util.target_mode.type.ExpectedPosition"]
-
-        elif value == 3:
-            # Ballistics, only for Arambai
+        elif value in {1, 2, 3}:
             target_mode = dataset.nyan_api_objects["engine.util.target_mode.type.ExpectedPosition"]
 
         obj_id = converter_group.get_id()
@@ -535,11 +520,7 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def blast_radius_upgrade(
@@ -563,11 +544,7 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def carry_capacity_upgrade(
@@ -591,11 +568,7 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def cost_food_upgrade(
@@ -1042,8 +1015,6 @@ class AoCUpgradeAttributeSubprocessor:
         head_unit_id = line.get_head_unit_id()
         dataset = line.data
 
-        patches = []
-
         obj_id = converter_group.get_id()
         if isinstance(converter_group, GenieTechEffectBundleGroup):
             tech_lookup_dict = internal_name_lookups.get_tech_lookups(dataset.game_version)
@@ -1105,9 +1076,7 @@ class AoCUpgradeAttributeSubprocessor:
         converter_group.add_raw_api_object(nyan_patch_raw_api_object)
 
         wrapper_forward_ref = ForwardRef(converter_group, wrapper_ref)
-        patches.append(wrapper_forward_ref)
-
-        return patches
+        return [wrapper_forward_ref]
 
     @staticmethod
     def garrison_capacity_upgrade(
@@ -1227,11 +1196,7 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def graphics_angle_upgrade(
@@ -1255,11 +1220,7 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def gold_counter_upgrade(
@@ -1283,11 +1244,7 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # Unused in AoC
-
-        return patches
+        return []
 
     @staticmethod
     def hp_upgrade(
@@ -1313,8 +1270,6 @@ class AoCUpgradeAttributeSubprocessor:
         """
         head_unit_id = line.get_head_unit_id()
         dataset = line.data
-
-        patches = []
 
         obj_id = converter_group.get_id()
         if isinstance(converter_group, GenieTechEffectBundleGroup):
@@ -1382,9 +1337,7 @@ class AoCUpgradeAttributeSubprocessor:
         converter_group.add_raw_api_object(nyan_patch_raw_api_object)
 
         wrapper_forward_ref = ForwardRef(converter_group, wrapper_ref)
-        patches.append(wrapper_forward_ref)
-
-        return patches
+        return [wrapper_forward_ref]
 
     @staticmethod
     def ignore_armor_upgrade(
@@ -1408,11 +1361,7 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def imperial_tech_id_upgrade(
@@ -1436,11 +1385,7 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # Unused in AoC
-
-        return patches
+        return []
 
     @staticmethod
     def kidnap_storage_upgrade(
@@ -1464,11 +1409,7 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # Unused in AoC
-
-        return patches
+        return []
 
     @staticmethod
     def los_upgrade(
@@ -1494,8 +1435,6 @@ class AoCUpgradeAttributeSubprocessor:
         """
         head_unit_id = line.get_head_unit_id()
         dataset = line.data
-
-        patches = []
 
         obj_id = converter_group.get_id()
         if isinstance(converter_group, GenieTechEffectBundleGroup):
@@ -1558,9 +1497,7 @@ class AoCUpgradeAttributeSubprocessor:
         converter_group.add_raw_api_object(nyan_patch_raw_api_object)
 
         wrapper_forward_ref = ForwardRef(converter_group, wrapper_ref)
-        patches.append(wrapper_forward_ref)
-
-        return patches
+        return [wrapper_forward_ref]
 
     @staticmethod
     def max_projectiles_upgrade(
@@ -1586,8 +1523,6 @@ class AoCUpgradeAttributeSubprocessor:
         """
         head_unit_id = line.get_head_unit_id()
         dataset = line.data
-
-        patches = []
 
         obj_id = converter_group.get_id()
         if isinstance(converter_group, GenieTechEffectBundleGroup):
@@ -1650,9 +1585,7 @@ class AoCUpgradeAttributeSubprocessor:
         converter_group.add_raw_api_object(nyan_patch_raw_api_object)
 
         wrapper_forward_ref = ForwardRef(converter_group, wrapper_ref)
-        patches.append(wrapper_forward_ref)
-
-        return patches
+        return [wrapper_forward_ref]
 
     @staticmethod
     def min_projectiles_upgrade(
@@ -1678,8 +1611,6 @@ class AoCUpgradeAttributeSubprocessor:
         """
         head_unit_id = line.get_head_unit_id()
         dataset = line.data
-
-        patches = []
 
         obj_id = converter_group.get_id()
         if isinstance(converter_group, GenieTechEffectBundleGroup):
@@ -1742,9 +1673,7 @@ class AoCUpgradeAttributeSubprocessor:
         converter_group.add_raw_api_object(nyan_patch_raw_api_object)
 
         wrapper_forward_ref = ForwardRef(converter_group, wrapper_ref)
-        patches.append(wrapper_forward_ref)
-
-        return patches
+        return [wrapper_forward_ref]
 
     @staticmethod
     def max_range_upgrade(
@@ -1792,14 +1721,13 @@ class AoCUpgradeAttributeSubprocessor:
             patch_target_parent = "engine.ability.type.ShootProjectile"
 
         elif line.is_melee():
-            if line.is_ranged():
-                patch_target_ref = f"{game_entity_name}.Attack"
-                patch_target_forward_ref = ForwardRef(line, patch_target_ref)
-                patch_target_parent = "engine.ability.type.RangedDiscreteEffect"
-
-            else:
+            if not line.is_ranged():
                 # excludes ram upgrades
                 return patches
+
+            patch_target_ref = f"{game_entity_name}.Attack"
+            patch_target_forward_ref = ForwardRef(line, patch_target_ref)
+            patch_target_parent = "engine.ability.type.RangedDiscreteEffect"
 
         elif line.has_command(104):
             patch_target_ref = f"{game_entity_name}.Convert"
@@ -1884,8 +1812,6 @@ class AoCUpgradeAttributeSubprocessor:
         head_unit_id = line.get_head_unit_id()
         dataset = line.data
 
-        patches = []
-
         obj_id = converter_group.get_id()
         if isinstance(converter_group, GenieTechEffectBundleGroup):
             tech_lookup_dict = internal_name_lookups.get_tech_lookups(dataset.game_version)
@@ -1959,9 +1885,7 @@ class AoCUpgradeAttributeSubprocessor:
         converter_group.add_raw_api_object(nyan_patch_raw_api_object)
 
         wrapper_forward_ref = ForwardRef(converter_group, wrapper_ref)
-        patches.append(wrapper_forward_ref)
-
-        return patches
+        return [wrapper_forward_ref]
 
     @staticmethod
     def move_speed_upgrade(
@@ -1987,8 +1911,6 @@ class AoCUpgradeAttributeSubprocessor:
         """
         head_unit_id = line.get_head_unit_id()
         dataset = line.data
-
-        patches = []
 
         obj_id = converter_group.get_id()
         if isinstance(converter_group, GenieTechEffectBundleGroup):
@@ -2051,9 +1973,7 @@ class AoCUpgradeAttributeSubprocessor:
         converter_group.add_raw_api_object(nyan_patch_raw_api_object)
 
         wrapper_forward_ref = ForwardRef(converter_group, wrapper_ref)
-        patches.append(wrapper_forward_ref)
-
-        return patches
+        return [wrapper_forward_ref]
 
     @staticmethod
     def projectile_unit_upgrade(
@@ -2077,11 +1997,7 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # Unused in AoC
-
-        return patches
+        return []
 
     @staticmethod
     def reload_time_upgrade(
@@ -2338,8 +2254,6 @@ class AoCUpgradeAttributeSubprocessor:
         head_unit_id = line.get_head_unit_id()
         dataset = line.data
 
-        patches = []
-
         obj_id = converter_group.get_id()
         if isinstance(converter_group, GenieTechEffectBundleGroup):
             tech_lookup_dict = internal_name_lookups.get_tech_lookups(dataset.game_version)
@@ -2415,9 +2329,7 @@ class AoCUpgradeAttributeSubprocessor:
         converter_group.add_raw_api_object(nyan_patch_raw_api_object)
 
         wrapper_forward_ref = ForwardRef(converter_group, wrapper_ref)
-        patches.append(wrapper_forward_ref)
-
-        return patches
+        return [wrapper_forward_ref]
 
     @staticmethod
     def rotation_speed_upgrade(
@@ -2441,11 +2353,7 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # Unused in AoC
-
-        return patches
+        return []
 
     @staticmethod
     def search_radius_upgrade(
@@ -2568,11 +2476,7 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # Unused in AoC
-
-        return patches
+        return []
 
     @staticmethod
     def tc_available_upgrade(
@@ -2596,11 +2500,7 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # Unused in AoC
-
-        return patches
+        return []
 
     @staticmethod
     def terrain_defense_upgrade(
@@ -2624,11 +2524,7 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # Unused in AoC
-
-        return patches
+        return []
 
     @staticmethod
     def train_button_upgrade(
@@ -2652,11 +2548,7 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def tribute_inefficiency_upgrade(
@@ -2680,11 +2572,7 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # Unused in AoC
-
-        return patches
+        return []
 
     @staticmethod
     def unit_size_x_upgrade(
@@ -2708,11 +2596,7 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # Unused in AoC
-
-        return patches
+        return []
 
     @staticmethod
     def unit_size_y_upgrade(
@@ -2736,11 +2620,7 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # Unused in AoC
-
-        return patches
+        return []
 
     @staticmethod
     def work_rate_upgrade(
@@ -2764,8 +2644,4 @@ class AoCUpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []

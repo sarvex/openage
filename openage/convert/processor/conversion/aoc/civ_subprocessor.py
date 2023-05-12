@@ -49,22 +49,18 @@ class AoCCivSubprocessor:
         """
         Returns global modifiers of a civ.
         """
-        modifiers = []
-
         for civ_bonus in civ_group.civ_boni.values():
             if civ_bonus.replaces_researchable_tech():
                 # TODO: instant tech research modifier
                 pass
 
-        return modifiers
+        return []
 
     @ staticmethod
     def get_starting_resources(civ_group: GenieCivilizationGroup) -> list[ForwardRef]:
         """
         Returns the starting resources of a civ.
         """
-        resource_amounts = []
-
         civ_id = civ_group.get_id()
         dataset = civ_group.data
 
@@ -117,8 +113,7 @@ class AoCCivSubprocessor:
                                            "engine.util.resource.ResourceAmount")
 
         food_forward_ref = ForwardRef(civ_group, food_ref)
-        resource_amounts.append(food_forward_ref)
-
+        resource_amounts = [food_forward_ref]
         wood_ref = f"{civ_name}.WoodStartingAmount"
         wood_raw_api_object = RawAPIObject(wood_ref, "WoodStartingAmount",
                                            dataset.nyan_api_objects)
@@ -297,11 +292,9 @@ class AoCCivSubprocessor:
             train_location_id = unique_line.get_train_location_id()
             if isinstance(unique_line, GenieBuildingLineGroup):
                 train_location = dataset.unit_lines[train_location_id]
-                train_location_name = name_lookup_dict[train_location_id][0]
-
             else:
                 train_location = dataset.building_lines[train_location_id]
-                train_location_name = name_lookup_dict[train_location_id][0]
+            train_location_name = name_lookup_dict[train_location_id][0]
 
             patch_target_ref = f"{train_location_name}.Create"
             patch_target_forward_ref = ForwardRef(train_location, patch_target_ref)
@@ -640,6 +633,4 @@ class AoCCivSubprocessor:
 
         line.add_raw_api_object(animation_raw_api_object)
 
-        animation_forward_ref = ForwardRef(line, animation_ref)
-
-        return animation_forward_ref
+        return ForwardRef(line, animation_ref)

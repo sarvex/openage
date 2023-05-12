@@ -117,10 +117,7 @@ class GenieTechEffectBundleGroup(ConverterObjectGroup):
         """
         Returns the civilization id if the tech is unique, otherwise return None.
         """
-        if self.is_unique():
-            return self.tech["civilization_id"].value
-
-        return None
+        return self.tech["civilization_id"].value if self.is_unique() else None
 
     def get_effects(self, effect_type: int = None) -> list[GenieEffectObject]:
         """
@@ -168,10 +165,7 @@ class GenieTechEffectBundleGroup(ConverterObjectGroup):
         """
         Returns True if the techology's effects do anything.
         """
-        if self.effects:
-            return len(self.effects.get_effects()) > 0
-
-        return False
+        return len(self.effects.get_effects()) > 0 if self.effects else False
 
     def __repr__(self):
         return f"GenieTechEffectBundleGroup<{self.get_id()}>"
@@ -607,10 +601,7 @@ class CivTechTree(ConverterObjectGroup):
         """
         Returns the associated effects.
         """
-        if self.effects:
-            return self.effects.get_effects()
-
-        return []
+        return self.effects.get_effects() if self.effects else []
 
     def __repr__(self):
         return f"CivTechTree<{self.get_id()}>"

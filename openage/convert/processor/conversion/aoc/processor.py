@@ -94,10 +94,7 @@ class AoCProcessor:
         dataset = cls._processor(dataset)
         debug_converter_object_groups(args.debugdir, args.debug_info, dataset)
 
-        # Create modpack definitions
-        modpacks = cls._post_processor(dataset)
-
-        return modpacks
+        return cls._post_processor(dataset)
 
     @classmethod
     def _pre_processor(
@@ -251,15 +248,12 @@ class AoCProcessor:
         # call hierarchy: wrapper[0]->researches
         raw_techs = gamespec[0]["researches"].value
 
-        index = 0
-        for raw_tech in raw_techs:
+        for index, raw_tech in enumerate(raw_techs):
             tech_id = index
             tech_members = raw_tech.value
 
             tech = GenieTechObject(tech_id, full_data_set, members=tech_members)
             full_data_set.genie_techs.update({tech.get_id(): tech})
-
-            index += 1
 
     @staticmethod
     def extract_genie_effect_bundles(
@@ -275,8 +269,7 @@ class AoCProcessor:
         # call hierarchy: wrapper[0]->effect_bundles
         raw_effect_bundles = gamespec[0]["effect_bundles"].value
 
-        index_bundle = 0
-        for raw_effect_bundle in raw_effect_bundles:
+        for index_bundle, raw_effect_bundle in enumerate(raw_effect_bundles):
             bundle_id = index_bundle
 
             # call hierarchy: effect_bundle->effects
@@ -284,17 +277,14 @@ class AoCProcessor:
 
             effects = {}
 
-            index_effect = 0
-            for raw_effect in raw_effects:
+            for index_effect, raw_effect in enumerate(raw_effects):
                 effect_id = index_effect
                 effect_members = raw_effect.value
 
                 effect = GenieEffectObject(effect_id, bundle_id, full_data_set,
                                            members=effect_members)
 
-                effects.update({effect_id: effect})
-
-                index_effect += 1
+                effects[effect_id] = effect
 
             # Pass everything to the bundle
             effect_bundle_members = raw_effect_bundle.value
@@ -304,8 +294,6 @@ class AoCProcessor:
             bundle = GenieEffectBundle(bundle_id, effects, full_data_set,
                                        members=effect_bundle_members)
             full_data_set.genie_effect_bundles.update({bundle.get_id(): bundle})
-
-            index_bundle += 1
 
     @staticmethod
     def extract_genie_civs(
@@ -321,8 +309,7 @@ class AoCProcessor:
         # call hierarchy: wrapper[0]->civs
         raw_civs = gamespec[0]["civs"].value
 
-        index = 0
-        for raw_civ in raw_civs:
+        for index, raw_civ in enumerate(raw_civs):
             civ_id = index
 
             civ_members = raw_civ.value
@@ -333,8 +320,6 @@ class AoCProcessor:
 
             civ = GenieCivilizationObject(civ_id, full_data_set, members=civ_members)
             full_data_set.genie_civs.update({civ.get_id(): civ})
-
-            index += 1
 
     @staticmethod
     def extract_age_connections(gamespec: ArrayMember, full_data_set: GenieObjectContainer) -> None:
@@ -478,15 +463,12 @@ class AoCProcessor:
         # call hierarchy: wrapper[0]->terrains
         raw_terrains = gamespec[0]["terrains"].value
 
-        index = 0
-        for raw_terrain in raw_terrains:
+        for index, raw_terrain in enumerate(raw_terrains):
             terrain_index = index
             terrain_members = raw_terrain.value
 
             terrain = GenieTerrainObject(terrain_index, full_data_set, members=terrain_members)
             full_data_set.genie_terrains.update({terrain.get_id(): terrain})
-
-            index += 1
 
     @staticmethod
     def create_unit_lines(full_data_set: GenieObjectContainer) -> None:
@@ -633,11 +615,11 @@ class AoCProcessor:
 
             # Check if we have to create a GenieStackBuildingGroup
             if building.has_member("stack_unit_id") and \
-                    building["stack_unit_id"].value > -1:
+                        building["stack_unit_id"].value > -1:
                 stack_building = True
 
             if building.has_member("head_unit_id") and \
-                    building["head_unit_id"].value > -1:
+                        building["head_unit_id"].value > -1:
                 # we don't care about head units because we process
                 # them with their stack unit
                 continue
@@ -668,11 +650,11 @@ class AoCProcessor:
 
                 # Search upgrade effects for the line_id
                 for upgrade in upgrade_effects:
-                    upgrade_source = upgrade["attr_a"].value
                     upgrade_target = upgrade["attr_b"].value
 
                     # Check if the upgrade target is correct
                     if upgrade_target == building_id:
+                        upgrade_source = upgrade["attr_a"].value
                         # Line id is the source building id
                         line_id = upgrade_source
                         break
@@ -706,14 +688,12 @@ class AoCProcessor:
                     building_line = GenieBuildingLineGroup(line_id, full_data_set)
 
                 full_data_set.building_lines.update({building_line.get_id(): building_line})
-                building_line.add_unit(building, after=previous_building_id)
-                full_data_set.unit_ref.update({building_id: building_line})
-
             else:
                 # It's an upgraded building
                 building_line = full_data_set.building_lines[line_id]
-                building_line.add_unit(building, after=previous_building_id)
-                full_data_set.unit_ref.update({building_id: building_line})
+
+            building_line.add_unit(building, after=previous_building_id)
+            full_data_set.unit_ref.update({building_id: building_line})
 
     @staticmethod
     def sanitize_effect_bundles(full_data_set: GenieObjectContainer) -> None:
@@ -739,17 +719,17 @@ class AoCProcessor:
                     # Effect has no type
                     continue
 
-                if effect_type == 3:
-                    if effect["attr_b"].value < 0:
-                        # Upgrade to invalid unit
-                        continue
+                if (
+                    effect_type == 102
+                    and effect["attr_d"].value < 0
+                    or effect_type != 102
+                    and effect_type == 3
+                    and effect["attr_b"].value < 0
+                ):
+                    # Tech disable effect with no tech id specified
+                    continue
 
-                if effect_type == 102:
-                    if effect["attr_d"].value < 0:
-                        # Tech disable effect with no tech id specified
-                        continue
-
-                sanitized_effects.update({index: effect})
+                sanitized_effects[index] = effect
                 index += 1
 
             bundle.effects = sanitized_effects
@@ -1214,11 +1194,11 @@ class AoCProcessor:
         :type full_data_set: class: ...dataformat.aoc.genie_object_container.GenieObjectContainer
         """
         garrisoned_lines = {}
-        garrisoned_lines.update(full_data_set.unit_lines)
+        garrisoned_lines |= full_data_set.unit_lines
         garrisoned_lines.update(full_data_set.ambient_groups)
 
         garrison_lines = {}
-        garrison_lines.update(full_data_set.unit_lines)
+        garrison_lines |= full_data_set.unit_lines
         garrison_lines.update(full_data_set.building_lines)
 
         # Search through all units and look at their garrison commands
@@ -1358,7 +1338,7 @@ class AoCProcessor:
         villager_groups = full_data_set.villager_groups
 
         repair_lines = {}
-        repair_lines.update(full_data_set.unit_lines)
+        repair_lines |= full_data_set.unit_lines
         repair_lines.update(full_data_set.building_lines)
 
         repair_classes = []
@@ -1373,13 +1353,7 @@ class AoCProcessor:
 
                 class_id = command["class_id"].value
                 if class_id == -1:
-                    # Buildings/Siege
-                    repair_classes.append(3)
-                    repair_classes.append(13)
-                    repair_classes.append(52)
-                    repair_classes.append(54)
-                    repair_classes.append(55)
-
+                    repair_classes.extend((3, 13, 52, 54, 55))
                 else:
                     repair_classes.append(class_id)
 

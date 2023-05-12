@@ -102,11 +102,7 @@ class TextureMetadata(DataDefinition):
         }
 
     def dump(self):
-        output_str = ""
-
-        # header
-        output_str += "# openage texture definition file\n\n"
-
+        output_str = "" + "# openage texture definition file\n\n"
         # version
         output_str += f"version {FORMAT_VERSION}\n\n"
 

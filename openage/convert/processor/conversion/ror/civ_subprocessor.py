@@ -26,8 +26,6 @@ class RoRCivSubprocessor:
         """
         Returns the starting resources of a civ.
         """
-        resource_amounts = []
-
         civ_id = civ_group.get_id()
         dataset = civ_group.data
 
@@ -80,8 +78,7 @@ class RoRCivSubprocessor:
                                            "engine.util.resource.ResourceAmount")
 
         food_forward_ref = ForwardRef(civ_group, food_ref)
-        resource_amounts.append(food_forward_ref)
-
+        resource_amounts = [food_forward_ref]
         wood_ref = f"{civ_name}.WoodStartingAmount"
         wood_raw_api_object = RawAPIObject(wood_ref, "WoodStartingAmount",
                                            dataset.nyan_api_objects)

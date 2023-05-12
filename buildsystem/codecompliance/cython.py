@@ -49,14 +49,12 @@ def find_issues(check_files, dirnames):
         data = readfile(filename)
 
         for num, line in enumerate(data.splitlines(True), start=1):
-            match = GLOBAL_PROFILE_DIREC.match(line)
-            if match:
+            if match := GLOBAL_PROFILE_DIREC.match(line):
                 yield issue_str_line("cython profiling activated in header",
                                      filename, line, num,
                                      (match.start(1), match.end(1)))
 
-            match = FUNC_PROFILE_DIREC.search(line)
-            if match:
+            if match := FUNC_PROFILE_DIREC.search(line):
                 yield issue_str_line("cython function profiling activated in file",
                                      filename, line, num,
                                      (match.start(0), match.end(0)))

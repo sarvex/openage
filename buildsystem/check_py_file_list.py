@@ -33,11 +33,10 @@ def main():
             if filepath.startswith(openage_dir):
                 listed.add(filepath)
             elif args.verbose:
-                print("Ignoring " + filepath + " outside " + openage_dir)
+                print(f"Ignoring {filepath} outside {openage_dir}")
 
     if args.verbose:
-        print("Files listed in " + args.py_file_list + ":",
-              *sorted(listed), sep='\n\t')
+        print(f"Files listed in {args.py_file_list}:", *sorted(listed), sep='\n\t')
 
     actual = set()
     for dirname, _, files in os.walk(openage_dir):
@@ -60,10 +59,7 @@ def main():
         print("file was listed via add_py_module but does not exist: " +
               os.path.relpath(filename, openage_dir))
 
-    if success:
-        return 0
-
-    return 1
+    return 0 if success else 1
 
 
 if __name__ == '__main__':

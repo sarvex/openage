@@ -73,10 +73,7 @@ class DE2Processor:
         dataset = cls._processor(dataset)
         debug_converter_object_groups(args.debugdir, args.debug_info, dataset)
 
-        # Create modpack definitions
-        modpacks = cls._post_processor(dataset)
-
-        return modpacks
+        return cls._post_processor(dataset)
 
     @classmethod
     def _pre_processor(
@@ -219,14 +216,13 @@ class DE2Processor:
                 unit_type = raw_unit["unit_type"].value
                 if unit_type >= 40:
                     unit_commands = raw_unit_headers[unit_id]["unit_commands"]
-                    unit.add_member(unit_commands)
-
                 else:
                     # Create empty member if no headers are present
                     unit_commands = ArrayMember("unit_commands",
                                                 StorageType.CONTAINER_MEMBER,
                                                 members=[])
-                    unit.add_member(unit_commands)
+
+                unit.add_member(unit_commands)
 
     @staticmethod
     def extract_genie_graphics(gamespec: ArrayMember, full_data_set: GenieObjectContainer) -> None:
@@ -290,7 +286,7 @@ class DE2Processor:
         :type full_data_set: class: ...dataformat.aoc.genie_object_container.GenieObjectContainer
         """
         variants = {}
-        variants.update(aoc_internal.VARIANT_GROUP_LOOKUPS)
+        variants |= aoc_internal.VARIANT_GROUP_LOOKUPS
         variants.update(de2_internal.VARIANT_GROUP_LOOKUPS)
 
         for group_id, variant in variants.items():

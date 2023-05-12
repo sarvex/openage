@@ -52,7 +52,7 @@ class GenieSound(ConverterObject):
         sound_items = self["sound_items"].value
         for item in sound_items:
             item_civ_id = item["civilization_id"].value
-            if not item_civ_id == civ_id:
+            if item_civ_id != civ_id:
                 continue
 
             sound_id = item["resource_id"].value

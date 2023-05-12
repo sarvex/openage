@@ -19,11 +19,12 @@ def find_pyx_modules(dirnames):
 def find_issues(check_files, dirnames):
     """ Invokes the external utility. """
 
-    invocation = ['--rcfile=etc/pylintrc', '--reports=n']
-
     from multiprocessing import cpu_count
-    invocation.append(f"--jobs={cpu_count():d}")
-
+    invocation = [
+        '--rcfile=etc/pylintrc',
+        '--reports=n',
+        f"--jobs={cpu_count():d}",
+    ]
     if check_files is None:
         invocation.extend(dirnames)
     else:

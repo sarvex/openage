@@ -4,6 +4,7 @@
 Checks the legal headers of all files.
 """
 
+
 from datetime import date
 import re
 from subprocess import Popen, PIPE
@@ -11,20 +12,16 @@ from subprocess import Popen, PIPE
 from .util import findfiles, readfile, writefile, has_ext, SHEBANG
 
 
-OPENAGE_AUTHORS = (
-    "Copyright (?P<crstart>\\d{4})-(?P<crend>\\d{4}) the openage authors\\."
-)
 OPENAGE_AUTHORTEMPLATE = (
     "Copyright {crstart}-{crend} the openage authors."
 )
 
+OPENAGE_AUTHORS = (
+    "Copyright (?P<crstart>\\d{4})-(?P<crend>\\d{4}) the openage authors\\."
+)
 NATIVELEGALHEADER = re.compile(
-    "^"
-    # Allow shebang line, followed by an optional empty line.
-    "(" + SHEBANG + ")?"
-
-    # Next line must be the copyright line.
-    "(#|//) " + OPENAGE_AUTHORS + " See copying\\.md for legal info\\.\n"
+    f"^({SHEBANG})?(#|//) {OPENAGE_AUTHORS}"
+    + " See copying\\.md for legal info\\.\n"
 )
 
 THIRDPARTYLEGALHEADER = re.compile(
@@ -207,7 +204,7 @@ def find_issues(check_files, paths, git_change_years=False):
         if not match:
             continue
 
-        filename = match.group(1)
+        filename = match[1]
         listed_files.add(filename)
 
     # file listed, but has no 3rd-party header?

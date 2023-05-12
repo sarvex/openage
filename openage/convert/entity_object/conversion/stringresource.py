@@ -37,10 +37,8 @@ class StringResource(GenieStructure):
         """
         Return the members in this struct.
         """
-        data_format = (
-            (True, "id", None,   "int32_t"),
+        return (
+            (True, "id", None, "int32_t"),
             (True, "lang", None, "char[16]"),
             (True, "text", None, "std::string"),
         )
-
-        return data_format

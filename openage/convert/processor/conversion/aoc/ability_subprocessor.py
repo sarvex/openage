@@ -127,7 +127,6 @@ class AoCAbilitySubprocessor:
 
             line.add_raw_api_object(property_raw_api_object)
 
-            animations_set = []
             animation_forward_ref = AoCAbilitySubprocessor.create_animation(
                 line,
                 ability_animation_id,
@@ -135,14 +134,14 @@ class AoCAbilitySubprocessor:
                 ability_name,
                 f"{command_lookup_dict[command_id][1]}_"
             )
-            animations_set.append(animation_forward_ref)
+            animations_set = [animation_forward_ref]
             property_raw_api_object.add_raw_member("animations", animations_set,
                                                    "engine.ability.property.type.Animated")
 
             property_forward_ref = ForwardRef(line, property_ref)
-            properties.update({
-                api_objects["engine.ability.property.type.Animated"]: property_forward_ref
-            })
+            properties[
+                api_objects["engine.ability.property.type.Animated"]
+            ] = property_forward_ref
 
             # Create custom civ graphics
             handled_graphics_set_ids = set()
@@ -157,13 +156,14 @@ class AoCAbilitySubprocessor:
                 civ_animation_id = civ["units"][current_unit_id]["attack_sprite_id"].value
 
                 if civ_animation_id != ability_animation_id:
-                    # Find the corresponding graphics set
-                    graphics_set_id = -1
-                    for set_id, items in gset_lookup_dict.items():
-                        if civ_id in items[0]:
-                            graphics_set_id = set_id
-                            break
-
+                    graphics_set_id = next(
+                        (
+                            set_id
+                            for set_id, items in gset_lookup_dict.items()
+                            if civ_id in items[0]
+                        ),
+                        -1,
+                    )
                     # Check if the object for the animation has been created before
                     obj_exists = graphics_set_id in handled_graphics_set_ids
                     if not obj_exists:
@@ -193,19 +193,18 @@ class AoCAbilitySubprocessor:
 
             line.add_raw_api_object(property_raw_api_object)
 
-            sounds_set = []
             sound_forward_ref = AoCAbilitySubprocessor.create_sound(line,
                                                                     ability_comm_sound_id,
                                                                     property_ref,
                                                                     ability_name,
                                                                     "command_")
-            sounds_set.append(sound_forward_ref)
+            sounds_set = [sound_forward_ref]
             property_raw_api_object.add_raw_member("sounds", sounds_set,
                                                    "engine.ability.property.type.CommandSound")
             property_forward_ref = ForwardRef(line, property_ref)
-            properties.update({
-                api_objects["engine.ability.property.type.CommandSound"]: property_forward_ref
-            })
+            properties[
+                api_objects["engine.ability.property.type.CommandSound"]
+            ] = property_forward_ref
 
         # Diplomacy settings
         property_ref = f"{ability_ref}.Diplomatic"
@@ -223,9 +222,9 @@ class AoCAbilitySubprocessor:
                                                "engine.ability.property.type.Diplomatic")
 
         property_forward_ref = ForwardRef(line, property_ref)
-        properties.update({
-            api_objects["engine.ability.property.type.Diplomatic"]: property_forward_ref
-        })
+        properties[
+            api_objects["engine.ability.property.type.Diplomatic"]
+        ] = property_forward_ref
 
         ability_raw_api_object.add_raw_member("properties",
                                               properties,
@@ -239,13 +238,7 @@ class AoCAbilitySubprocessor:
                                                   "engine.ability.type.RangedContinuousEffect")
 
             # Max range
-            if command_id == 105:
-                # Heal
-                max_range = 4
-
-            else:
-                max_range = current_unit["weapon_range_max"].value
-
+            max_range = 4 if command_id == 105 else current_unit["weapon_range_max"].value
             ability_raw_api_object.add_raw_member("max_range",
                                                   max_range,
                                                   "engine.ability.type.RangedContinuousEffect")
@@ -295,9 +288,7 @@ class AoCAbilitySubprocessor:
                                               [],
                                               "engine.ability.type.ApplyContinuousEffect")
 
-        ability_forward_ref = ForwardRef(line, ability_raw_api_object.get_id())
-
-        return ability_forward_ref
+        return ForwardRef(line, ability_raw_api_object.get_id())
 
     @staticmethod
     def apply_discrete_effect_ability(

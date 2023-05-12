@@ -91,7 +91,7 @@ class PXDGenerator:
             the comment text, as string, including the '//'
         """
         try:
-            val = re.match('^// (.*)$', val).group(1)
+            val = re.match('^// (.*)$', val)[1]
         except AttributeError as ex:
             raise self.parser_error("invalid single-line comment") from ex
 
@@ -107,20 +107,20 @@ class PXDGenerator:
         """
         try:
             # pylint: disable=no-member
-            val = re.match(r"^/\*(.*)\*/$", val, re.DOTALL).group(1)
+            val = re.match(r"^/\*(.*)\*/$", val, re.DOTALL)[1]
         except AttributeError as ex:
             raise self.parser_error("invalid multi-line comment") from ex
 
         # for a comment '/* foo\n * bar\n */', val is now 'foo\n * bar\n '
         # however, we'd prefer ' * foo\n * bar'
-        val = ' * ' + val.rstrip()
+        val = f' * {val.rstrip()}'
         # actually, we'd prefer [' * foo', ' * bar'].
         lines = val.split('\n')
 
         comment_lines = []
         for idx, line in enumerate(lines):
             try:
-                line = re.match(r'^ \*( (.*))?$', line).group(2) or ""
+                line = re.match(r'^ \*( (.*))?$', line)[2] or ""
             except AttributeError as ex:
                 raise self.parser_error("invalid multi-line comment line",
                                         idx + self.lineno) from ex
@@ -163,11 +163,7 @@ class PXDGenerator:
         """
         if "{" in self.stack:
             raise self.parser_error("PXD annotation is brace-enclosed")
-        if not self.stack:
-            namespace = None
-        else:
-            namespace = "::".join(self.stack)
-
+        namespace = None if not self.stack else "::".join(self.stack)
         self.annotations.append((namespace, annotation_lines))
 
     def handle_token(self, token, val):
@@ -197,10 +193,6 @@ class PXDGenerator:
 
         elif token == Token.Comment.Multiline and 'pxd:' in val:
             self.handle_multiline_comment(val)
-
-        else:
-            # we don't care about all those other tokens
-            pass
 
         return 0
 
@@ -292,7 +284,7 @@ class PXDGenerator:
         yield ("# Auto-generated from annotations in " +
                self.filename.name)
 
-        yield "# " + str(self.filename)
+        yield f"# {str(self.filename)}"
 
         self.parse()
 
@@ -320,8 +312,7 @@ class PXDGenerator:
                 prefix = ""
 
             for annotation in annotation_lines:
-                annotation = self.postprocess_annotation_line(annotation)
-                if annotation:
+                if annotation := self.postprocess_annotation_line(annotation):
                     yield prefix + annotation
                 else:
                     # don't emit a line that consists of just the prefix
@@ -368,10 +359,12 @@ class PXDGenerator:
 
         on parsing failure, raises ParserError.
         """
-        if not ignore_timestamps and os.path.exists(pxdfile):
-            # skip the file if the timestamp is up to date
-            if os.path.getmtime(self.filename) <= os.path.getmtime(pxdfile):
-                return False
+        if (
+            not ignore_timestamps
+            and os.path.exists(pxdfile)
+            and os.path.getmtime(self.filename) <= os.path.getmtime(pxdfile)
+        ):
+            return False
 
         result = "\n".join(self.get_pxd_lines())
 
@@ -385,10 +378,7 @@ class PXDGenerator:
             pxdfile.parent.mkdir()
 
         with pxdfile.open('w', encoding='utf8') as outfile:
-            if pxdfile.is_absolute():
-                printpath = pxdfile
-            else:
-                printpath = os.path.relpath(pxdfile, CWD)
+            printpath = pxdfile if pxdfile.is_absolute() else os.path.relpath(pxdfile, CWD)
             print(f"\x1b[36mpxdgen: generate {printpath}\x1b[0m")
 
             outfile.write(result)
@@ -479,7 +469,7 @@ def main():
         for dirname in pxdfile_relpath.parents:
             template = out_cppdir / dirname / "__init__"
             for extension in ("py", "pxd"):
-                initfile = template.with_suffix("." + extension)
+                initfile = template.with_suffix(f".{extension}")
                 if not initfile.exists():
                     print("\x1b[36mpxdgen: create package index "
                           f"{initfile.relative_to(args.output_dir)}\x1b[0m")

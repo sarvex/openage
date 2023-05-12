@@ -217,9 +217,8 @@ class AoCNyanSubprocessor:
         # =======================================================================
         # Abilities
         # =======================================================================
-        abilities_set = []
+        abilities_set = [AoCAbilitySubprocessor.death_ability(unit_line)]
 
-        abilities_set.append(AoCAbilitySubprocessor.death_ability(unit_line))
         abilities_set.append(AoCAbilitySubprocessor.delete_ability(unit_line))
         abilities_set.append(AoCAbilitySubprocessor.despawn_ability(unit_line))
         abilities_set.append(AoCAbilitySubprocessor.idle_ability(unit_line))
@@ -239,9 +238,7 @@ class AoCNyanSubprocessor:
         if len(unit_line.creates) > 0:
             abilities_set.append(AoCAbilitySubprocessor.create_ability(unit_line))
 
-        # Config
-        ability = AoCAbilitySubprocessor.use_contingent_ability(unit_line)
-        if ability:
+        if ability := AoCAbilitySubprocessor.use_contingent_ability(unit_line):
             abilities_set.append(ability)
 
         if unit_line.get_head_unit_id() in (125, 692):
@@ -300,12 +297,12 @@ class AoCNyanSubprocessor:
                 abilities_set.append(AoCAbilitySubprocessor.collect_storage_ability(unit_line))
 
         if len(unit_line.garrison_locations) > 0:
-            ability = AoCAbilitySubprocessor.enter_container_ability(unit_line)
-            if ability:
+            if ability := AoCAbilitySubprocessor.enter_container_ability(
+                unit_line
+            ):
                 abilities_set.append(ability)
 
-            ability = AoCAbilitySubprocessor.exit_container_ability(unit_line)
-            if ability:
+            if ability := AoCAbilitySubprocessor.exit_container_ability(unit_line):
                 abilities_set.append(ability)
 
         if isinstance(unit_line, GenieMonkGroup):
@@ -428,9 +425,10 @@ class AoCNyanSubprocessor:
         # =======================================================================
         # Abilities
         # =======================================================================
-        abilities_set = []
+        abilities_set = [
+            AoCAbilitySubprocessor.attribute_change_tracker_ability(building_line)
+        ]
 
-        abilities_set.append(AoCAbilitySubprocessor.attribute_change_tracker_ability(building_line))
         abilities_set.append(AoCAbilitySubprocessor.death_ability(building_line))
         abilities_set.append(AoCAbilitySubprocessor.delete_ability(building_line))
         abilities_set.append(AoCAbilitySubprocessor.despawn_ability(building_line))
@@ -450,7 +448,7 @@ class AoCNyanSubprocessor:
             abilities_set.append(AoCAbilitySubprocessor.constructable_ability(building_line))
 
         if building_line.is_passable() or\
-                (isinstance(building_line, GenieStackBuildingGroup) and building_line.is_gate()):
+                    (isinstance(building_line, GenieStackBuildingGroup) and building_line.is_gate()):
             abilities_set.append(AoCAbilitySubprocessor.passable_ability(building_line))
 
         if building_line.has_foundation():
@@ -498,8 +496,9 @@ class AoCNyanSubprocessor:
         if building_line.is_dropsite():
             abilities_set.append(AoCAbilitySubprocessor.drop_site_ability(building_line))
 
-        ability = AoCAbilitySubprocessor.provide_contingent_ability(building_line)
-        if ability:
+        if ability := AoCAbilitySubprocessor.provide_contingent_ability(
+            building_line
+        ):
             abilities_set.append(ability)
 
         # Trade abilities
@@ -555,19 +554,9 @@ class AoCNyanSubprocessor:
         raw_api_object.set_filename(name_lookup_dict[ambient_id][1])
         ambient_group.add_raw_api_object(raw_api_object)
 
-        # =======================================================================
-        # Game Entity Types
-        # =======================================================================
-        # we give an ambient the types
-        #    - util.game_entity_type.types.Ambient
-        # =======================================================================
-        # Create or use existing auxiliary types
-        types_set = []
-
         type_obj = dataset.pregen_nyan_objects["util.game_entity_type.types.Ambient"].get_nyan_object(
         )
-        types_set.append(type_obj)
-
+        types_set = [type_obj]
         unit_class = ambient_unit["unit_class"].value
         class_name = class_lookup_dict[unit_class]
         class_obj_name = f"util.game_entity_type.types.{class_name}"
@@ -584,15 +573,20 @@ class AoCNyanSubprocessor:
         interaction_mode = ambient_unit["interaction_mode"].value
 
         if interaction_mode >= 0:
-            abilities_set.append(AoCAbilitySubprocessor.death_ability(ambient_group))
-            abilities_set.append(AoCAbilitySubprocessor.hitbox_ability(ambient_group))
-            abilities_set.append(AoCAbilitySubprocessor.idle_ability(ambient_group))
-            abilities_set.append(AoCAbilitySubprocessor.live_ability(ambient_group))
-            abilities_set.append(AoCAbilitySubprocessor.named_ability(ambient_group))
-            abilities_set.append(AoCAbilitySubprocessor.resistance_ability(ambient_group))
-            abilities_set.append(AoCAbilitySubprocessor.terrain_requirement_ability(ambient_group))
-            abilities_set.append(AoCAbilitySubprocessor.visibility_ability(ambient_group))
-
+            abilities_set.extend(
+                (
+                    AoCAbilitySubprocessor.death_ability(ambient_group),
+                    AoCAbilitySubprocessor.hitbox_ability(ambient_group),
+                    AoCAbilitySubprocessor.idle_ability(ambient_group),
+                    AoCAbilitySubprocessor.live_ability(ambient_group),
+                    AoCAbilitySubprocessor.named_ability(ambient_group),
+                    AoCAbilitySubprocessor.resistance_ability(ambient_group),
+                    AoCAbilitySubprocessor.terrain_requirement_ability(
+                        ambient_group
+                    ),
+                    AoCAbilitySubprocessor.visibility_ability(ambient_group),
+                )
+            )
         if interaction_mode >= 2:
             abilities_set.extend(AoCAbilitySubprocessor.selectable_ability(ambient_group))
 
@@ -647,19 +641,9 @@ class AoCNyanSubprocessor:
         raw_api_object.set_filename(name_lookup_dict[variant_id][1])
         variant_group.add_raw_api_object(raw_api_object)
 
-        # =======================================================================
-        # Game Entity Types
-        # =======================================================================
-        # we give variants the types
-        #    - util.game_entity_type.types.Ambient
-        # =======================================================================
-        # Create or use existing auxiliary types
-        types_set = []
-
         type_obj = dataset.pregen_nyan_objects["util.game_entity_type.types.Ambient"].get_nyan_object(
         )
-        types_set.append(type_obj)
-
+        types_set = [type_obj]
         unit_class = variant_main_unit["unit_class"].value
         class_name = class_lookup_dict[unit_class]
         class_obj_name = f"util.game_entity_type.types.{class_name}"
@@ -671,9 +655,8 @@ class AoCNyanSubprocessor:
         # =======================================================================
         # Abilities
         # =======================================================================
-        abilities_set = []
+        abilities_set = [AoCAbilitySubprocessor.death_ability(variant_group)]
 
-        abilities_set.append(AoCAbilitySubprocessor.death_ability(variant_group))
         abilities_set.append(AoCAbilitySubprocessor.despawn_ability(variant_group))
         abilities_set.append(AoCAbilitySubprocessor.idle_ability(variant_group))
         abilities_set.append(AoCAbilitySubprocessor.named_ability(variant_group))
@@ -682,7 +665,7 @@ class AoCNyanSubprocessor:
         abilities_set.append(AoCAbilitySubprocessor.visibility_ability(variant_group))
 
         if variant_main_unit.has_member("speed") and variant_main_unit["speed"].value > 0.0001\
-                and variant_main_unit.has_member("command_sound_id"):
+                    and variant_main_unit.has_member("command_sound_id"):
             # TODO: Let variant groups be converted without having command_sound_id member
             abilities_set.append(AoCAbilitySubprocessor.move_ability(variant_group))
 
@@ -707,19 +690,18 @@ class AoCNyanSubprocessor:
 
         variant_type = name_lookup_dict[variant_id][3]
 
-        index = 0
-        for variant in variant_group.line:
+        for index, variant in enumerate(variant_group.line):
             # Create a diff
             diff_variant = variant_main_unit.diff(variant)
 
-            if variant_type == "random":
-                variant_type_ref = "engine.util.variant.type.RandomVariant"
-
-            elif variant_type == "angle":
+            if variant_type == "angle":
                 variant_type_ref = "engine.util.variant.type.PerspectiveVariant"
 
             elif variant_type == "misc":
                 variant_type_ref = "engine.util.variant.type.MiscVariant"
+
+            elif variant_type == "random":
+                variant_type_ref = "engine.util.variant.type.RandomVariant"
 
             variant_name = f"Variant{str(index)}"
             variant_ref = f"{game_entity_name}.{variant_name}"
@@ -751,7 +733,7 @@ class AoCNyanSubprocessor:
                                                                        diff_variant))
 
             if variant_main_unit.has_member("speed") and variant_main_unit["speed"].value > 0.0001\
-                    and variant_main_unit.has_member("command_sound_id"):
+                        and variant_main_unit.has_member("command_sound_id"):
                 # TODO: Let variant groups be converted without having command_sound_id member:
                 patches.extend(AoCUpgradeAbilitySubprocessor.move_ability(variant_group,
                                                                           variant_group,
@@ -768,21 +750,19 @@ class AoCNyanSubprocessor:
                                                   1,
                                                   "engine.util.variant.Variant")
 
-            if variant_type == "random":
-                variant_raw_api_object.add_raw_member("chance_share",
-                                                      1 / len(variant_group.line),
-                                                      "engine.util.variant.type.RandomVariant")
-
-            elif variant_type == "angle":
+            if variant_type == "angle":
                 variant_raw_api_object.add_raw_member("angle",
                                                       index,
                                                       "engine.util.variant.type.PerspectiveVariant")
 
+            elif variant_type == "random":
+                variant_raw_api_object.add_raw_member("chance_share",
+                                                      1 / len(variant_group.line),
+                                                      "engine.util.variant.type.RandomVariant")
+
             variants_forward_ref = ForwardRef(variant_group, variant_ref)
             variants_set.append(variants_forward_ref)
             variant_group.add_raw_api_object(variant_raw_api_object)
-
-            index += 1
 
         raw_api_object.add_raw_member("variants", variants_set,
                                       "engine.util.game_entity.GameEntity")
@@ -1237,9 +1217,11 @@ class AoCNyanSubprocessor:
             # =======================================================================
             # Abilities
             # =======================================================================
-            abilities_set = []
-            abilities_set.append(AoCAbilitySubprocessor.projectile_ability(
-                line, position=projectile_num))
+            abilities_set = [
+                AoCAbilitySubprocessor.projectile_ability(
+                    line, position=projectile_num
+                )
+            ]
             abilities_set.append(AoCAbilitySubprocessor.move_projectile_ability(
                 line, position=projectile_num))
             abilities_set.append(AoCAbilitySubprocessor.apply_discrete_effect_ability(
@@ -1251,9 +1233,8 @@ class AoCNyanSubprocessor:
             # =======================================================================
             # Modifiers
             # =======================================================================
-            modifiers_set = []
+            modifiers_set = [AoCModifierSubprocessor.flyover_effect_modifier(line)]
 
-            modifiers_set.append(AoCModifierSubprocessor.flyover_effect_modifier(line))
             modifiers_set.extend(AoCModifierSubprocessor.elevation_attack_modifiers(line))
 
             proj_raw_api_object.add_raw_member(

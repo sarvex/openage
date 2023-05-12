@@ -83,10 +83,7 @@ class CombinedTerrain:
         Return the terrain file location relative to where the file
         is expected to be in the modpack.
         """
-        if len(self._refs) >= 1:
-            return f"./graphics/{self.filename}.terrain"
-
-        return None
+        return f"./graphics/{self.filename}.terrain" if len(self._refs) >= 1 else None
 
     def remove_reference(self, referer: ConverterObject) -> None:
         """

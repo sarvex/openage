@@ -43,7 +43,7 @@ def get_author_emails_copying_md():
             if not match:
                 continue
 
-            email = match.group(1).strip()
+            email = match[1].strip()
             if 'à' in email:
                 email = deobfuscate_email(email)
 
@@ -65,17 +65,13 @@ def get_author_emails_git_shortlog(exts):
 
     invocation = ['git', 'shortlog', '-sne', '--']
     for ext in exts:
-        invocation.append(f"*{ext}")
-        invocation.append(f"*{ext}.in")
-        invocation.append(f"*{ext}.template")
-
+        invocation.extend((f"*{ext}", f"*{ext}.in", f"*{ext}.template"))
     with Popen(invocation, stdout=PIPE) as invoc:
         output = invoc.communicate()[0]
 
     for line in output.decode('utf-8', errors='replace').split('\n'):
-        match = re.match("^ +[0-9]+\t[^<]*\\<(.*)\\>$", line)
-        if match:
-            yield match.group(1).lower()
+        if match := re.match("^ +[0-9]+\t[^<]*\\<(.*)\\>$", line):
+            yield match[1].lower()
 
 
 def find_issues():

@@ -105,13 +105,11 @@ class GenieEffectBundle(ConverterObject):
         :rtype: list
         """
         if effect_type:
-            matching_effects = []
-            for effect in self.effects.values():
-                if effect.get_type() == effect_type:
-                    matching_effects.append(effect)
-
-            return matching_effects
-
+            return [
+                effect
+                for effect in self.effects.values()
+                if effect.get_type() == effect_type
+            ]
         return list(self.effects.values())
 
     def is_sanitized(self) -> bool:

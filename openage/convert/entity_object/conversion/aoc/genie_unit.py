@@ -619,9 +619,7 @@ class GenieUnitLineGroup(GenieGameEntityGroup):
             return -1
 
         head_unit_connection = self.data.unit_connections[head_unit_id]
-        enabling_research_id = head_unit_connection["enabling_research"].value
-
-        return enabling_research_id
+        return head_unit_connection["enabling_research"].value
 
     def __repr__(self):
         return f"GenieUnitLineGroup<{self.get_id()}>"
@@ -717,13 +715,11 @@ class GenieBuildingLineGroup(GenieGameEntityGroup):
         head_unit_id = head_unit["id0"].value
         if head_unit_id in self.data.building_connections.keys():
             head_unit_connection = self.data.building_connections[head_unit_id]
-            enabling_research_id = head_unit_connection["enabling_research"].value
+            return head_unit_connection["enabling_research"].value
 
         else:
             # Assume it is avialable from the start
-            enabling_research_id = -1
-
-        return enabling_research_id
+            return -1
 
     def __repr__(self):
         return f"GenieBuildingLineGroup<{self.get_id()}>"
@@ -772,10 +768,7 @@ class GenieStackBuildingGroup(GenieBuildingLineGroup):
         train_location_id = self.head["train_location_id"].value
 
         # -1 = no train location
-        if train_location_id == -1:
-            return False
-
-        return True
+        return train_location_id != -1
 
     def is_gate(self) -> bool:
         """
@@ -817,10 +810,7 @@ class GenieStackBuildingGroup(GenieBuildingLineGroup):
         Returns the group_id for a villager group if the head building is
         creatable, otherwise return None.
         """
-        if self.is_creatable():
-            return self.head["train_location_id"].value
-
-        return None
+        return self.head["train_location_id"].value if self.is_creatable() else None
 
     def __repr__(self):
         return f"GenieStackBuildingGroup<{self.get_id()}>"
@@ -1148,19 +1138,15 @@ class GenieVillagerGroup(GenieUnitLineGroup):
 
         # Reference to the variant task groups
         self.variants: list[GenieUnitTaskGroup] = []
-        for task_group_id in task_group_ids:
-            task_group = self.data.task_groups[task_group_id]
-            self.variants.append(task_group)
-
+        self.variants.extend(
+            self.data.task_groups[task_group_id]
+            for task_group_id in task_group_ids
+        )
         # List of buildings that units can create
         self.creates: list[GenieGameEntityGroup] = []
 
     def contains_entity(self, unit_id: int) -> bool:
-        for task_group in self.variants:
-            if task_group.contains_entity(unit_id):
-                return True
-
-        return False
+        return any(task_group.contains_entity(unit_id) for task_group in self.variants)
 
     def has_command(self, command_id: int, civ_id: int = -1) -> bool:
         for variant in self.variants:
@@ -1181,11 +1167,7 @@ class GenieVillagerGroup(GenieUnitLineGroup):
 
         :returns: True if any train location obj_id is greater than zero.
         """
-        for variant in self.variants:
-            if variant.is_creatable():
-                return True
-
-        return False
+        return any(variant.is_creatable() for variant in self.variants)
 
     def is_garrison(self, civ_id: int = -1) -> bool:
         return False
@@ -1244,11 +1226,14 @@ class GenieVillagerGroup(GenieUnitLineGroup):
         Returns the group_id for building line if the task group is
         creatable, otherwise return None.
         """
-        for variant in self.variants:
-            if variant.is_creatable():
-                return variant.get_train_location_id()
-
-        return None
+        return next(
+            (
+                variant.get_train_location_id()
+                for variant in self.variants
+                if variant.is_creatable()
+            ),
+            None,
+        )
 
     def __repr__(self):
         return f"GenieVillagerGroup<{self.get_id()}>"

@@ -69,8 +69,7 @@ class ModpackInfo(DataDefinition):
                         for available parameters.
         :type contact: dict
         """
-        author = {}
-        author["name"] = name
+        author = {"name": name}
         if fullname:
             author["fullname"] = fullname
 
@@ -105,9 +104,7 @@ class ModpackInfo(DataDefinition):
         :param description: Path to a file with a description of the team.
         :type description: str
         """
-        author_group = {}
-        author_group["name"] = name
-        author_group["authors"] = authors
+        author_group = {"name": name, "authors": authors}
         if description:
             author_group["description"] = description
 
@@ -212,10 +209,7 @@ class ModpackInfo(DataDefinition):
         Outputs the modpack info to the TOML output format.
         """
         output_str = "# openage modpack definition file\n\n"
-        output_dict = {}
-
-        # File version
-        output_dict.update({"file_version": FILE_VERSION})
+        output_dict = {"file_version": FILE_VERSION}
 
         # info table
         if not self.packagename:
@@ -233,7 +227,7 @@ class ModpackInfo(DataDefinition):
         )
         info_table["info"].update(self.extra_info)
 
-        output_dict.update(info_table)
+        output_dict |= info_table
 
         # assets table
         assets_table = {"assets": {}}
@@ -244,31 +238,31 @@ class ModpackInfo(DataDefinition):
             }
         )
 
-        output_dict.update(assets_table)
+        output_dict |= assets_table
 
         # dependency table
         dependency_table = {"dependency": {}}
         dependency_table["dependency"].update({"modpacks": self.requires})
 
-        output_dict.update(dependency_table)
+        output_dict |= dependency_table
 
         # conflicts table
         conflicts_table = {"conflict": {}}
         conflicts_table["conflict"].update({"modpacks": self.conflicts})
 
-        output_dict.update(conflicts_table)
+        output_dict |= conflicts_table
 
         # authors table
         authors_table = {"authors": {}}
         authors_table["authors"].update(self.authors)
 
-        output_dict.update(authors_table)
+        output_dict |= authors_table
 
         # authorgroups table
         authorgroups_table = {"authorgroups": {}}
         authorgroups_table["authorgroups"].update(self.author_groups)
 
-        output_dict.update(authorgroups_table)
+        output_dict |= authorgroups_table
 
         output_str += toml.dumps(output_dict)
 

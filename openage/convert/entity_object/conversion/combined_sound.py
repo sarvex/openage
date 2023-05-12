@@ -88,10 +88,7 @@ class CombinedSound:
         if len(self._refs) > 1:
             return f"../shared/sounds/{self.filename}.opus"
 
-        if len(self._refs) == 1:
-            return f"./sounds/{self.filename}.opus"
-
-        return None
+        return f"./sounds/{self.filename}.opus" if len(self._refs) == 1 else None
 
     def resolve_sound_location(self) -> str:
         """

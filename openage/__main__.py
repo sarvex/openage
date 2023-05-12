@@ -157,9 +157,12 @@ def main(argv=None):
                   "Did you run the command from the build directory (bin/)?\n"
                   "See doc/building.md for more information.")
 
-    if "asset_dir" in args and args.asset_dir:
-        if not os.path.exists(args.asset_dir):
-            cli.error("asset directory does not exist: " + args.asset_dir)
+    if (
+        "asset_dir" in args
+        and args.asset_dir
+        and not os.path.exists(args.asset_dir)
+    ):
+        cli.error(f"asset directory does not exist: {args.asset_dir}")
 
     # call the entry point for the subcommand.
     return args.entrypoint(args, cli.error)

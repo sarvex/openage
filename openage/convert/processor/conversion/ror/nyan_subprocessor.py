@@ -207,9 +207,8 @@ class RoRNyanSubprocessor:
         # =======================================================================
         # Abilities
         # =======================================================================
-        abilities_set = []
+        abilities_set = [AoCAbilitySubprocessor.death_ability(unit_line)]
 
-        abilities_set.append(AoCAbilitySubprocessor.death_ability(unit_line))
         abilities_set.append(AoCAbilitySubprocessor.delete_ability(unit_line))
         abilities_set.append(AoCAbilitySubprocessor.despawn_ability(unit_line))
         abilities_set.append(AoCAbilitySubprocessor.idle_ability(unit_line))
@@ -229,9 +228,7 @@ class RoRNyanSubprocessor:
         if len(unit_line.creates) > 0:
             abilities_set.append(AoCAbilitySubprocessor.create_ability(unit_line))
 
-        # Config
-        ability = AoCAbilitySubprocessor.use_contingent_ability(unit_line)
-        if ability:
+        if ability := AoCAbilitySubprocessor.use_contingent_ability(unit_line):
             abilities_set.append(ability)
 
         if unit_line.has_command(104):
@@ -285,12 +282,12 @@ class RoRNyanSubprocessor:
             abilities_set.append(AoCAbilitySubprocessor.remove_storage_ability(unit_line))
 
         if len(unit_line.garrison_locations) > 0:
-            ability = AoCAbilitySubprocessor.enter_container_ability(unit_line)
-            if ability:
+            if ability := AoCAbilitySubprocessor.enter_container_ability(
+                unit_line
+            ):
                 abilities_set.append(ability)
 
-            ability = AoCAbilitySubprocessor.exit_container_ability(unit_line)
-            if ability:
+            if ability := AoCAbilitySubprocessor.exit_container_ability(unit_line):
                 abilities_set.append(ability)
 
         # Resource abilities
@@ -398,9 +395,10 @@ class RoRNyanSubprocessor:
         # =======================================================================
         # Abilities
         # =======================================================================
-        abilities_set = []
+        abilities_set = [
+            AoCAbilitySubprocessor.attribute_change_tracker_ability(building_line)
+        ]
 
-        abilities_set.append(AoCAbilitySubprocessor.attribute_change_tracker_ability(building_line))
         abilities_set.append(AoCAbilitySubprocessor.death_ability(building_line))
         abilities_set.append(AoCAbilitySubprocessor.delete_ability(building_line))
         abilities_set.append(AoCAbilitySubprocessor.despawn_ability(building_line))
@@ -443,8 +441,9 @@ class RoRNyanSubprocessor:
         if building_line.is_dropsite():
             abilities_set.append(AoCAbilitySubprocessor.drop_site_ability(building_line))
 
-        ability = AoCAbilitySubprocessor.provide_contingent_ability(building_line)
-        if ability:
+        if ability := AoCAbilitySubprocessor.provide_contingent_ability(
+            building_line
+        ):
             abilities_set.append(ability)
 
         # Trade abilities
@@ -496,19 +495,9 @@ class RoRNyanSubprocessor:
         raw_api_object.set_filename(name_lookup_dict[ambient_id][1])
         ambient_group.add_raw_api_object(raw_api_object)
 
-        # =======================================================================
-        # Game Entity Types
-        # =======================================================================
-        # we give an ambient the types
-        #    - util.game_entity_type.types.Ambient
-        # =======================================================================
-        # Create or use existing auxiliary types
-        types_set = []
-
         type_obj = dataset.pregen_nyan_objects["util.game_entity_type.types.Ambient"].get_nyan_object(
         )
-        types_set.append(type_obj)
-
+        types_set = [type_obj]
         unit_class = ambient_unit["unit_class"].value
         class_name = class_lookup_dict[unit_class]
         class_obj_name = f"util.game_entity_type.types.{class_name}"
@@ -525,15 +514,20 @@ class RoRNyanSubprocessor:
         interaction_mode = ambient_unit["interaction_mode"].value
 
         if interaction_mode >= 0:
-            abilities_set.append(AoCAbilitySubprocessor.death_ability(ambient_group))
-            abilities_set.append(AoCAbilitySubprocessor.hitbox_ability(ambient_group))
-            abilities_set.append(AoCAbilitySubprocessor.idle_ability(ambient_group))
-            abilities_set.append(AoCAbilitySubprocessor.live_ability(ambient_group))
-            abilities_set.append(AoCAbilitySubprocessor.named_ability(ambient_group))
-            abilities_set.append(AoCAbilitySubprocessor.resistance_ability(ambient_group))
-            abilities_set.append(AoCAbilitySubprocessor.terrain_requirement_ability(ambient_group))
-            abilities_set.append(AoCAbilitySubprocessor.visibility_ability(ambient_group))
-
+            abilities_set.extend(
+                (
+                    AoCAbilitySubprocessor.death_ability(ambient_group),
+                    AoCAbilitySubprocessor.hitbox_ability(ambient_group),
+                    AoCAbilitySubprocessor.idle_ability(ambient_group),
+                    AoCAbilitySubprocessor.live_ability(ambient_group),
+                    AoCAbilitySubprocessor.named_ability(ambient_group),
+                    AoCAbilitySubprocessor.resistance_ability(ambient_group),
+                    AoCAbilitySubprocessor.terrain_requirement_ability(
+                        ambient_group
+                    ),
+                    AoCAbilitySubprocessor.visibility_ability(ambient_group),
+                )
+            )
         if interaction_mode >= 2:
             abilities_set.extend(AoCAbilitySubprocessor.selectable_ability(ambient_group))
 
@@ -1013,9 +1007,11 @@ class RoRNyanSubprocessor:
             # =======================================================================
             # Abilities
             # =======================================================================
-            abilities_set = []
-            abilities_set.append(RoRAbilitySubprocessor.projectile_ability(
-                line, position=projectile_num))
+            abilities_set = [
+                RoRAbilitySubprocessor.projectile_ability(
+                    line, position=projectile_num
+                )
+            ]
             abilities_set.append(AoCAbilitySubprocessor.move_projectile_ability(
                 line, position=projectile_num))
             abilities_set.append(AoCAbilitySubprocessor.apply_discrete_effect_ability(

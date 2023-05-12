@@ -44,7 +44,7 @@ class HDMediaSubprocessor:
             ref_graphics = sprite.get_graphics()
             graphic_targetdirs = sprite.resolve_graphics_location()
 
-            metadata_filename = f"{sprite.get_filename()}.{'sprite'}"
+            metadata_filename = f"{sprite.get_filename()}.sprite"
             metadata_export = SpriteMetadataExport(sprite.resolve_sprite_location(),
                                                    metadata_filename)
             full_data_set.metadata_exports.append(metadata_export)

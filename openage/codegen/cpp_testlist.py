@@ -44,8 +44,7 @@ class Namespace:
 
         for namespacename, namespace in sorted(self.namespaces.items()):
             yield f"namespace {namespacename} {{\n"
-            for line in namespace.gen_prototypes():
-                yield line
+            yield from namespace.gen_prototypes()
             yield f"}} // {namespacename}\n\n"
 
     def get_functionnames(self):
@@ -53,12 +52,10 @@ class Namespace:
         Yields all function names in this namespace,
         as well as all subnamespaces.
         """
-        for name in self.functions:
-            yield name
-
+        yield from self.functions
         for namespacename, namespace in sorted(self.namespaces.items()):
             for name in namespace.get_functionnames():
-                yield namespacename + "::" + name
+                yield f"{namespacename}::{name}"
 
 
 def generate_testlist(projectdir):

@@ -37,14 +37,13 @@ def main():
     for module in modules:
         sourcefile = Path(module)
 
-        if args.configuration in sourcefile.parts:
-            # If `sourcefile` has a configuration component, remove it.
-            file_parts = list(sourcefile.parts)
-            file_parts.remove(args.configuration)
-            targetfile = Path(*file_parts)
-        else:
+        if args.configuration not in sourcefile.parts:
             continue
 
+        # If `sourcefile` has a configuration component, remove it.
+        file_parts = list(sourcefile.parts)
+        file_parts.remove(args.configuration)
+        targetfile = Path(*file_parts)
         if targetfile.exists():
             if args.clean:
                 print(targetfile)

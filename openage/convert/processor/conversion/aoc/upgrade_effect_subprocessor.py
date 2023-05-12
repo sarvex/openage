@@ -183,17 +183,6 @@ class AoCUpgradeEffectSubprocessor:
                                                                "engine.util.effect_batch.EffectBatch",
                                                                MemberOperator.ADD)
 
-                patch_forward_ref = ForwardRef(tech_group, nyan_patch_ref)
-                wrapper_raw_api_object.add_raw_member("patch",
-                                                      patch_forward_ref,
-                                                      "engine.util.patch.Patch")
-
-                tech_group.add_raw_api_object(wrapper_raw_api_object)
-                tech_group.add_raw_api_object(nyan_patch_raw_api_object)
-
-                wrapper_forward_ref = ForwardRef(tech_group, wrapper_ref)
-                patches.append(wrapper_forward_ref)
-
             elif isinstance(diff_attack, RightMissingMember):
                 # Patch the effect out of the ability
                 attack = diff_attack.ref
@@ -239,17 +228,6 @@ class AoCUpgradeEffectSubprocessor:
                                                                [attack_forward_ref],
                                                                "engine.util.effect_batch.EffectBatch",
                                                                MemberOperator.SUBTRACT)
-
-                patch_forward_ref = ForwardRef(tech_group, nyan_patch_ref)
-                wrapper_raw_api_object.add_raw_member("patch",
-                                                      patch_forward_ref,
-                                                      "engine.util.patch.Patch")
-
-                tech_group.add_raw_api_object(wrapper_raw_api_object)
-                tech_group.add_raw_api_object(nyan_patch_raw_api_object)
-
-                wrapper_forward_ref = ForwardRef(tech_group, wrapper_ref)
-                patches.append(wrapper_forward_ref)
 
             else:
                 diff_armor_class = diff_attack["type_id"]
@@ -301,16 +279,16 @@ class AoCUpgradeEffectSubprocessor:
                                                                "engine.util.attribute.AttributeAmount",
                                                                MemberOperator.ADD)
 
-                patch_forward_ref = ForwardRef(tech_group, nyan_patch_ref)
-                wrapper_raw_api_object.add_raw_member("patch",
-                                                      patch_forward_ref,
-                                                      "engine.util.patch.Patch")
+            patch_forward_ref = ForwardRef(tech_group, nyan_patch_ref)
+            wrapper_raw_api_object.add_raw_member("patch",
+                                                  patch_forward_ref,
+                                                  "engine.util.patch.Patch")
 
-                tech_group.add_raw_api_object(wrapper_raw_api_object)
-                tech_group.add_raw_api_object(nyan_patch_raw_api_object)
+            tech_group.add_raw_api_object(wrapper_raw_api_object)
+            tech_group.add_raw_api_object(nyan_patch_raw_api_object)
 
-                wrapper_forward_ref = ForwardRef(tech_group, wrapper_ref)
-                patches.append(wrapper_forward_ref)
+            wrapper_forward_ref = ForwardRef(tech_group, wrapper_ref)
+            patches.append(wrapper_forward_ref)
 
         return patches
 
@@ -451,17 +429,6 @@ class AoCUpgradeEffectSubprocessor:
                                                                "engine.ability.type.Resistance",
                                                                MemberOperator.ADD)
 
-                patch_forward_ref = ForwardRef(tech_group, nyan_patch_ref)
-                wrapper_raw_api_object.add_raw_member("patch",
-                                                      patch_forward_ref,
-                                                      "engine.util.patch.Patch")
-
-                tech_group.add_raw_api_object(wrapper_raw_api_object)
-                tech_group.add_raw_api_object(nyan_patch_raw_api_object)
-
-                wrapper_forward_ref = ForwardRef(tech_group, wrapper_ref)
-                patches.append(wrapper_forward_ref)
-
             elif isinstance(diff_armor, RightMissingMember):
                 # Patch the resistance out of the ability
                 armor = diff_armor.ref
@@ -507,17 +474,6 @@ class AoCUpgradeEffectSubprocessor:
                                                                [attack_forward_ref],
                                                                "engine.ability.type.Resistance",
                                                                MemberOperator.SUBTRACT)
-
-                patch_forward_ref = ForwardRef(tech_group, nyan_patch_ref)
-                wrapper_raw_api_object.add_raw_member("patch",
-                                                      patch_forward_ref,
-                                                      "engine.util.patch.Patch")
-
-                tech_group.add_raw_api_object(wrapper_raw_api_object)
-                tech_group.add_raw_api_object(nyan_patch_raw_api_object)
-
-                wrapper_forward_ref = ForwardRef(tech_group, wrapper_ref)
-                patches.append(wrapper_forward_ref)
 
             else:
                 diff_armor_class = diff_armor["type_id"]
@@ -569,15 +525,15 @@ class AoCUpgradeEffectSubprocessor:
                                                                "engine.util.attribute.AttributeAmount",
                                                                MemberOperator.ADD)
 
-                patch_forward_ref = ForwardRef(tech_group, nyan_patch_ref)
-                wrapper_raw_api_object.add_raw_member("patch",
-                                                      patch_forward_ref,
-                                                      "engine.util.patch.Patch")
+            patch_forward_ref = ForwardRef(tech_group, nyan_patch_ref)
+            wrapper_raw_api_object.add_raw_member("patch",
+                                                  patch_forward_ref,
+                                                  "engine.util.patch.Patch")
 
-                tech_group.add_raw_api_object(wrapper_raw_api_object)
-                tech_group.add_raw_api_object(nyan_patch_raw_api_object)
+            tech_group.add_raw_api_object(wrapper_raw_api_object)
+            tech_group.add_raw_api_object(nyan_patch_raw_api_object)
 
-                wrapper_forward_ref = ForwardRef(tech_group, wrapper_ref)
-                patches.append(wrapper_forward_ref)
+            wrapper_forward_ref = ForwardRef(tech_group, wrapper_ref)
+            patches.append(wrapper_forward_ref)
 
         return patches

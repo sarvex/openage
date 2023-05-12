@@ -97,22 +97,19 @@ def find_issues_with_lines(data, filename):
 
     for num, line in enumerate(data.splitlines(True), start=1):
 
-        match = MISSING_SPACES_RE.search(line)
-        if match:
+        if match := MISSING_SPACES_RE.search(line):
             start = match.start(1) + match.start(2)
             end = start + 1
             yield issue_str_line("Missing space",
                                  filename, line, num,
                                  (start, end))
 
-        match = EXTRA_SPACES_RE.search(line)
-        if match:
+        if match := EXTRA_SPACES_RE.search(line):
             yield issue_str_line("Extra space",
                                  filename, line, num,
                                  (match.start(1), match.end(1)))
 
-        match = INDENT_FAIL_LINE_RE.search(line)
-        if match:
+        if match := INDENT_FAIL_LINE_RE.search(line):
             yield issue_str_line("Wrong indentation",
                                  filename, line, num,
                                  (match.start(1), match.end(1)))

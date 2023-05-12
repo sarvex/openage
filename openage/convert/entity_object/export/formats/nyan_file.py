@@ -64,11 +64,10 @@ class NyanFile(DataDefinition):
         """
         fileinfo_str = f"# NYAN FILE\nversion {FILE_VERSION}\n\n"
         import_str = ""
-        objects_str = ""
-
-        for nyan_object in self.nyan_objects:
-            objects_str += nyan_object.dump(import_tree=self.import_tree)
-
+        objects_str = "".join(
+            nyan_object.dump(import_tree=self.import_tree)
+            for nyan_object in self.nyan_objects
+        )
         # Removes one empty newline at the end of the objects definition
         objects_str = objects_str[:-1]
 
@@ -84,9 +83,7 @@ class NyanFile(DataDefinition):
 
         import_str += "\n"
 
-        output_str = fileinfo_str + import_str + objects_str
-
-        return output_str
+        return fileinfo_str + import_str + objects_str
 
     def get_fqon(self) -> str:
         """

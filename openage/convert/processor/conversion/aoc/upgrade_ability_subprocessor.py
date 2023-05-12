@@ -75,15 +75,15 @@ class AoCUpgradeAbilitySubprocessor:
         game_entity_name = name_lookup_dict[head_unit_id][0]
         ability_name = command_lookup_dict[command_id][0]
 
-        changed = False
         diff_animation = diff["attack_sprite_id"]
         diff_comm_sound = diff["command_sound_id"]
         diff_frame_delay = diff["frame_delay"]
-        if any(not isinstance(value, NoDiffMember) for value in (diff_animation,
-                                                                 diff_comm_sound,
-                                                                 diff_frame_delay)):
-            changed = True
-
+        changed = any(
+            (
+                not isinstance(value, NoDiffMember)
+                for value in (diff_animation, diff_comm_sound, diff_frame_delay)
+            )
+        )
         # Command types Heal, Construct, Repair are not upgraded by lines
 
         diff_min_range = None
@@ -444,20 +444,19 @@ class AoCUpgradeAbilitySubprocessor:
 
         game_entity_name = name_lookup_dict[head_unit_id][0]
 
-        if diff:
-            diff_damage_graphics = diff["damage_graphics"]
-            if isinstance(diff_damage_graphics, NoDiffMember):
-                return patches
-
-            diff_damage_animations = diff_damage_graphics.value
-
-        else:
+        if not diff:
             return patches
+
+        diff_damage_graphics = diff["damage_graphics"]
+        if isinstance(diff_damage_graphics, NoDiffMember):
+            return patches
+
+        diff_damage_animations = diff_damage_graphics.value
 
         percentage = 0
         for diff_damage_animation in diff_damage_animations:
             if isinstance(diff_damage_animation, NoDiffMember) or\
-                    isinstance(diff_damage_animation["graphic_id"], NoDiffMember):
+                        isinstance(diff_damage_animation["graphic_id"], NoDiffMember):
                 continue
 
             # This should be a NoDiffMember
@@ -560,15 +559,14 @@ class AoCUpgradeAbilitySubprocessor:
 
         game_entity_name = name_lookup_dict[head_unit_id][0]
 
-        if diff:
-            diff_animation = diff["dying_graphic"]
-            if isinstance(diff_animation, NoDiffMember):
-                return patches
-
-            diff_animation_id = diff_animation.value
-
-        else:
+        if not diff:
             return patches
+
+        diff_animation = diff["dying_graphic"]
+        if isinstance(diff_animation, NoDiffMember):
+            return patches
+
+        diff_animation_id = diff_animation.value
 
         patch_target_ref = f"{game_entity_name}.Death"
         patch_target_forward_ref = ForwardRef(line, patch_target_ref)
@@ -663,15 +661,14 @@ class AoCUpgradeAbilitySubprocessor:
 
         game_entity_name = name_lookup_dict[head_unit_id][0]
 
-        if diff:
-            diff_dead_unit = diff["dead_unit_id"]
-            if isinstance(diff_dead_unit, NoDiffMember):
-                return patches
-
-            diff_animation_id = dataset.genie_units[diff_dead_unit.value]["idle_graphic0"].value
-
-        else:
+        if not diff:
             return patches
+
+        diff_dead_unit = diff["dead_unit_id"]
+        if isinstance(diff_dead_unit, NoDiffMember):
+            return patches
+
+        diff_animation_id = dataset.genie_units[diff_dead_unit.value]["idle_graphic0"].value
 
         patch_target_ref = f"{game_entity_name}.Despawn"
         patch_target_forward_ref = ForwardRef(line, patch_target_ref)
@@ -766,15 +763,14 @@ class AoCUpgradeAbilitySubprocessor:
 
         game_entity_name = name_lookup_dict[head_unit_id][0]
 
-        if diff:
-            diff_animation = diff["idle_graphic0"]
-            if isinstance(diff_animation, NoDiffMember):
-                return patches
-
-            diff_animation_id = diff_animation.value
-
-        else:
+        if not diff:
             return patches
+
+        diff_animation = diff["idle_graphic0"]
+        if isinstance(diff_animation, NoDiffMember):
+            return patches
+
+        diff_animation_id = diff_animation.value
 
         patch_target_ref = f"{game_entity_name}.Idle"
         patch_target_forward_ref = ForwardRef(line, patch_target_ref)

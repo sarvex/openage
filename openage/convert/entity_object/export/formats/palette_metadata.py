@@ -39,11 +39,7 @@ class PaletteMetadata(DataDefinition):
         self.colours.extend(colours)
 
     def dump(self) -> str:
-        output_str = ""
-
-        # header
-        output_str += "# openage palette definition file\n\n"
-
+        output_str = "" + "# openage palette definition file\n\n"
         # version
         output_str += f"version {FORMAT_VERSION}\n\n"
 

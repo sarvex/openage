@@ -379,10 +379,11 @@ class AoCEffectSubprocessor:
 
         repairable_lines = []
         repairable_lines.extend(dataset.building_lines.values())
-        for unit_line in dataset.unit_lines.values():
-            if unit_line.is_repairable():
-                repairable_lines.append(unit_line)
-
+        repairable_lines.extend(
+            unit_line
+            for unit_line in dataset.unit_lines.values()
+            if unit_line.is_repairable()
+        )
         for repairable_line in repairable_lines:
             game_entity_name = name_lookup_dict[repairable_line.get_head_unit_id()][0]
 
@@ -673,8 +674,6 @@ class AoCEffectSubprocessor:
         """
         dataset = line.data
 
-        resistances = []
-
         # AoE2Convert
         resistance_parent = "engine.resistance.discrete.convert.Convert"
         convert_parent = "engine.resistance.discrete.convert.type.AoE2Convert"
@@ -730,9 +729,7 @@ class AoCEffectSubprocessor:
 
         line.add_raw_api_object(resistance_raw_api_object)
         resistance_forward_ref = ForwardRef(line, resistance_ref)
-        resistances.append(resistance_forward_ref)
-
-        return resistances
+        return [resistance_forward_ref]
 
     @staticmethod
     def get_heal_resistances(
@@ -750,8 +747,6 @@ class AoCEffectSubprocessor:
         :rtype: list
         """
         dataset = line.data
-
-        resistances = []
 
         resistance_parent = "engine.resistance.continuous.flat_attribute_change.FlatAttributeChange"
         heal_parent = "engine.resistance.continuous.flat_attribute_change.type.FlatAttributeChangeIncrease"
@@ -796,9 +791,7 @@ class AoCEffectSubprocessor:
 
         line.add_raw_api_object(resistance_raw_api_object)
         resistance_forward_ref = ForwardRef(line, resistance_ref)
-        resistances.append(resistance_forward_ref)
-
-        return resistances
+        return [resistance_forward_ref]
 
     @staticmethod
     def get_repair_resistances(
@@ -818,8 +811,6 @@ class AoCEffectSubprocessor:
         current_unit_id = line.get_head_unit_id()
         dataset = line.data
         api_objects = dataset.nyan_api_objects
-
-        resistances = []
 
         name_lookup_dict = internal_name_lookups.get_entity_lookups(dataset.game_version)
 
@@ -880,9 +871,7 @@ class AoCEffectSubprocessor:
 
         line.add_raw_api_object(resistance_raw_api_object)
         resistance_forward_ref = ForwardRef(line, resistance_ref)
-        resistances.append(resistance_forward_ref)
-
-        return resistances
+        return [resistance_forward_ref]
 
     @staticmethod
     def get_construct_resistances(
@@ -902,8 +891,6 @@ class AoCEffectSubprocessor:
         current_unit_id = line.get_head_unit_id()
         dataset = line.data
         api_objects = dataset.nyan_api_objects
-
-        resistances = []
 
         name_lookup_dict = internal_name_lookups.get_entity_lookups(dataset.game_version)
 
@@ -932,8 +919,7 @@ class AoCEffectSubprocessor:
 
         line.add_raw_api_object(resistance_raw_api_object)
         resistance_forward_ref = ForwardRef(line, resistance_ref)
-        resistances.append(resistance_forward_ref)
-
+        resistances = [resistance_forward_ref]
         # Stacking of villager construction times
         construct_property = dataset.pregen_nyan_objects["resistance.property.types.BuildingConstruct"].get_nyan_object(
         )

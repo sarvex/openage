@@ -132,19 +132,13 @@ class GenieCivilizationGroup(ConverterObjectGroup):
         """
         Returns the effects of the team bonus.
         """
-        if self.team_bonus:
-            return self.team_bonus.get_effects()
-
-        return []
+        return self.team_bonus.get_effects() if self.team_bonus else []
 
     def get_tech_tree_effects(self) -> list[GenieEffectObject]:
         """
         Returns the tech tree effects.
         """
-        if self.tech_tree:
-            return self.tech_tree.get_effects()
-
-        return []
+        return self.tech_tree.get_effects() if self.tech_tree else []
 
     def __repr__(self):
         return f"GenieCivilizationGroup<{self.get_id()}>"

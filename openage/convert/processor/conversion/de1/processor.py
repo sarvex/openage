@@ -67,10 +67,7 @@ class DE1Processor:
         dataset = cls._processor(gamespec, dataset)
         debug_converter_object_groups(args.debugdir, args.debug_info, dataset)
 
-        # Create modpack definitions
-        modpacks = cls._post_processor(dataset)
-
-        return modpacks
+        return cls._post_processor(dataset)
 
     @classmethod
     def _pre_processor(

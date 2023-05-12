@@ -60,11 +60,9 @@ class RoRAuxiliarySubprocessor:
         train_location_id = line.get_train_location_id()
         if isinstance(line, GenieBuildingLineGroup):
             train_location = dataset.unit_lines[train_location_id]
-            train_location_name = name_lookup_dict[train_location_id][0]
-
         else:
             train_location = dataset.building_lines[train_location_id]
-            train_location_name = name_lookup_dict[train_location_id][0]
+        train_location_name = name_lookup_dict[train_location_id][0]
 
         # Add object to the train location's Create ability
         creatable_location = ForwardRef(train_location,
@@ -173,7 +171,7 @@ class RoRAuxiliarySubprocessor:
             line.add_raw_api_object(cost_amount)
 
             if isinstance(line, GenieBuildingLineGroup) or\
-                    line.get_class_id() in (2, 13, 20, 21, 22):
+                        line.get_class_id() in (2, 13, 20, 21, 22):
                 # Cost for repairing = half of the construction cost
                 cost_amount_name = f"{cost_repair_name}.{resource_name}Amount"
                 cost_amount = RawAPIObject(cost_amount_name,
@@ -239,15 +237,13 @@ class RoRAuxiliarySubprocessor:
 
             if file_id in dataset.combined_sounds:
                 creation_sound = dataset.combined_sounds[file_id]
-                creation_sound.add_reference(sound_raw_api_object)
-
             else:
                 creation_sound = CombinedSound(creation_sound_id,
                                                file_id,
                                                f"creation_sound_{creation_sound_id}",
                                                dataset)
                 dataset.combined_sounds.update({file_id: creation_sound})
-                creation_sound.add_reference(sound_raw_api_object)
+            creation_sound.add_reference(sound_raw_api_object)
 
             creation_sounds.append(creation_sound)
 

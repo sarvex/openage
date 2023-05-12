@@ -43,19 +43,16 @@ class TextureImage:
             picture_data = numpy.array(picture_data)
 
         if not isinstance(picture_data, numpy.ndarray):
-            raise ValueError("Texture image must be created from PIL Image "
-                             "or numpy array, not '%s'" % type(picture_data))
+            raise ValueError(
+                f"Texture image must be created from PIL Image or numpy array, not '{type(picture_data)}'"
+            )
 
-        self.width: int = picture_data.shape[1]
         self.height: int = picture_data.shape[0]
 
+        self.width: int = picture_data.shape[1]
         spam("creating TextureImage with size %d x %d", self.width, self.height)
 
-        if hotspot is None:
-            self.hotspot = (0, 0)
-        else:
-            self.hotspot = hotspot
-
+        self.hotspot = (0, 0) if hotspot is None else hotspot
         self.data = picture_data
 
     def get_pil_image(self) -> Image.Image:
@@ -86,15 +83,13 @@ class Texture(GenieStructure):
     ):
         super().__init__()
 
-        # Compression setting values for libpng
-        self.best_compr: tuple = None
-
         # Best packer hints (positions of sprites in texture)
         self.best_packer_hints: tuple = None
 
         self.image_data: TextureImage = None
         self.image_metadata: list[dict[str, int]] = {}
 
+        self.best_compr: tuple = None
         spam("creating Texture from %s", repr(input_data))
 
         from ...value_object.read.media.slp import SLP
@@ -115,11 +110,9 @@ class Texture(GenieStructure):
                 else:
                     main_palette = palettes[palette_number].array
 
-                for subtex in self._to_subtextures(frame,
-                                                   main_palette,
-                                                   custom_cutter):
-                    self.frames.append(subtex)
-
+                self.frames.extend(
+                    iter(self._to_subtextures(frame, main_palette, custom_cutter))
+                )
         elif isinstance(input_data, SLD):
             input_frames = input_data.get_frames(layer)
             if layer == 0 and len(input_frames) == 0:
@@ -143,8 +136,9 @@ class Texture(GenieStructure):
                 for tile in input_data.alphamasks
             ]
         else:
-            raise Exception("cannot create Texture "
-                            "from unknown source type: %s" % (type(input_data)))
+            raise Exception(
+                f"cannot create Texture from unknown source type: {type(input_data)}"
+            )
 
     def _to_subtextures(
         self,
@@ -160,12 +154,7 @@ class Texture(GenieStructure):
             hotspot=frame.get_hotspot()
         )
 
-        if custom_cutter:
-            # this may cut the texture into some parts
-            return custom_cutter.cut(subtex)
-
-        else:
-            return [subtex]
+        return custom_cutter.cut(subtex) if custom_cutter else [subtex]
 
     def get_metadata(self) -> list[dict[str, int]]:
         """
@@ -186,7 +175,7 @@ class Texture(GenieStructure):
         """
         Return the members in this struct.
         """
-        data_format = (
+        return (
             (True, "x", None, "int32_t"),
             (True, "y", None, "int32_t"),
             (True, "w", None, "int32_t"),
@@ -194,4 +183,3 @@ class Texture(GenieStructure):
             (True, "cx", None, "int32_t"),
             (True, "cy", None, "int32_t"),
         )
-        return data_format

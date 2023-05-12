@@ -74,13 +74,7 @@ class CombinedSprite:
         graphics = [self.data.genie_graphics[self.head_sprite_id]]
         graphics.extend(self.data.genie_graphics[self.head_sprite_id].get_subgraphics())
 
-        # Only consider existing graphics
-        existing_graphics = []
-        for graphic in graphics:
-            if graphic.exists:
-                existing_graphics.append(graphic)
-
-        return existing_graphics
+        return [graphic for graphic in graphics if graphic.exists]
 
     def get_id(self) -> int:
         """
@@ -96,10 +90,7 @@ class CombinedSprite:
         if len(self._refs) > 1:
             return f"../shared/graphics/{self.filename}.sprite"
 
-        if len(self._refs) == 1:
-            return f"./graphics/{self.filename}.sprite"
-
-        return None
+        return f"./graphics/{self.filename}.sprite" if len(self._refs) == 1 else None
 
     def remove_reference(self, referer: ConverterObject) -> None:
         """
@@ -112,16 +103,12 @@ class CombinedSprite:
         Returns the planned location in the modpack of all image files
         referenced by the sprite.
         """
-        location_dict = {}
-
-        for graphic in self.get_graphics():
-            if graphic.is_shared():
-                location_dict.update({graphic.get_id(): "data/game_entity/shared/graphics/"})
-
-            else:
-                location_dict.update({graphic.get_id(): self.resolve_sprite_location()})
-
-        return location_dict
+        return {
+            graphic.get_id(): "data/game_entity/shared/graphics/"
+            if graphic.is_shared()
+            else self.resolve_sprite_location()
+            for graphic in self.get_graphics()
+        }
 
     def resolve_sprite_location(self) -> str:
         """

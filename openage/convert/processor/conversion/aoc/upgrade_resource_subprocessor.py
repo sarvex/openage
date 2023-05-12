@@ -50,8 +50,6 @@ class AoCUpgradeResourceSubprocessor:
         dataset = converter_group.data
         line = dataset.unit_lines[berserk_id]
 
-        patches = []
-
         name_lookup_dict = internal_name_lookups.get_entity_lookups(dataset.game_version)
 
         obj_id = converter_group.get_id()
@@ -115,9 +113,7 @@ class AoCUpgradeResourceSubprocessor:
         converter_group.add_raw_api_object(nyan_patch_raw_api_object)
 
         wrapper_forward_ref = ForwardRef(converter_group, wrapper_ref)
-        patches.append(wrapper_forward_ref)
-
-        return patches
+        return [wrapper_forward_ref]
 
     @staticmethod
     def bonus_population_upgrade(
@@ -139,8 +135,6 @@ class AoCUpgradeResourceSubprocessor:
         :rtype: list
         """
         dataset = converter_group.data
-
-        patches = []
 
         obj_id = converter_group.get_id()
         if isinstance(converter_group, GenieTechEffectBundleGroup):
@@ -199,9 +193,7 @@ class AoCUpgradeResourceSubprocessor:
         converter_group.add_raw_api_object(nyan_patch_raw_api_object)
 
         wrapper_forward_ref = ForwardRef(converter_group, wrapper_ref)
-        patches.append(wrapper_forward_ref)
-
-        return patches
+        return [wrapper_forward_ref]
 
     @staticmethod
     def building_conversion_upgrade(
@@ -225,8 +217,6 @@ class AoCUpgradeResourceSubprocessor:
         monk_id = 125
         dataset = converter_group.data
         line = dataset.unit_lines[monk_id]
-
-        patches = []
 
         name_lookup_dict = internal_name_lookups.get_entity_lookups(dataset.game_version)
 
@@ -310,8 +300,7 @@ class AoCUpgradeResourceSubprocessor:
         converter_group.add_raw_api_object(nyan_patch_raw_api_object)
 
         wrapper_forward_ref = ForwardRef(converter_group, wrapper_ref)
-        patches.append(wrapper_forward_ref)
-
+        patches = [wrapper_forward_ref]
         # Siege unit conversion
 
         # Wrapper
@@ -390,11 +379,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def construction_speed_upgrade(
@@ -415,11 +400,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def conversion_resistance_upgrade(
@@ -440,11 +421,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def conversion_resistance_min_rounds_upgrade(
@@ -465,11 +442,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def conversion_resistance_max_rounds_upgrade(
@@ -490,11 +463,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def crenellations_upgrade(
@@ -515,11 +484,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def faith_recharge_rate_upgrade(
@@ -543,8 +508,6 @@ class AoCUpgradeResourceSubprocessor:
         monk_id = 125
         dataset = converter_group.data
         line = dataset.unit_lines[monk_id]
-
-        patches = []
 
         name_lookup_dict = internal_name_lookups.get_entity_lookups(dataset.game_version)
 
@@ -607,9 +570,7 @@ class AoCUpgradeResourceSubprocessor:
         converter_group.add_raw_api_object(nyan_patch_raw_api_object)
 
         wrapper_forward_ref = ForwardRef(converter_group, wrapper_ref)
-        patches.append(wrapper_forward_ref)
-
-        return patches
+        return [wrapper_forward_ref]
 
     @staticmethod
     def farm_food_upgrade(
@@ -633,8 +594,6 @@ class AoCUpgradeResourceSubprocessor:
         farm_id = 50
         dataset = converter_group.data
         line = dataset.building_lines[farm_id]
-
-        patches = []
 
         name_lookup_dict = internal_name_lookups.get_entity_lookups(dataset.game_version)
 
@@ -697,9 +656,7 @@ class AoCUpgradeResourceSubprocessor:
         converter_group.add_raw_api_object(nyan_patch_raw_api_object)
 
         wrapper_forward_ref = ForwardRef(converter_group, wrapper_ref)
-        patches.append(wrapper_forward_ref)
-
-        return patches
+        return [wrapper_forward_ref]
 
     @staticmethod
     def gather_food_efficiency_upgrade(
@@ -720,11 +677,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def gather_wood_efficiency_upgrade(
@@ -745,11 +698,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def gather_gold_efficiency_upgrade(
@@ -770,11 +719,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def gather_stone_efficiency_upgrade(
@@ -795,11 +740,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def heal_range_upgrade(
@@ -823,8 +764,6 @@ class AoCUpgradeResourceSubprocessor:
         monk_id = 125
         dataset = converter_group.data
         line = dataset.unit_lines[monk_id]
-
-        patches = []
 
         name_lookup_dict = internal_name_lookups.get_entity_lookups(dataset.game_version)
 
@@ -887,9 +826,7 @@ class AoCUpgradeResourceSubprocessor:
         converter_group.add_raw_api_object(nyan_patch_raw_api_object)
 
         wrapper_forward_ref = ForwardRef(converter_group, wrapper_ref)
-        patches.append(wrapper_forward_ref)
-
-        return patches
+        return [wrapper_forward_ref]
 
     @staticmethod
     def heal_rate_upgrade(
@@ -910,11 +847,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # Unused in AoC
-
-        return patches
+        return []
 
     @staticmethod
     def herding_dominance_upgrade(
@@ -935,11 +868,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def heresy_upgrade(
@@ -960,11 +889,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def monk_conversion_upgrade(
@@ -988,8 +913,6 @@ class AoCUpgradeResourceSubprocessor:
         monk_id = 125
         dataset = converter_group.data
         line = dataset.unit_lines[monk_id]
-
-        patches = []
 
         name_lookup_dict = internal_name_lookups.get_entity_lookups(dataset.game_version)
 
@@ -1053,9 +976,7 @@ class AoCUpgradeResourceSubprocessor:
         converter_group.add_raw_api_object(nyan_patch_raw_api_object)
 
         wrapper_forward_ref = ForwardRef(converter_group, wrapper_ref)
-        patches.append(wrapper_forward_ref)
-
-        return patches
+        return [wrapper_forward_ref]
 
     @staticmethod
     def relic_gold_bonus_upgrade(
@@ -1076,9 +997,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        return patches
+        return []
 
     @staticmethod
     def research_time_upgrade(
@@ -1099,11 +1018,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def reveal_ally_upgrade(
@@ -1124,11 +1039,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def reveal_enemy_upgrade(
@@ -1149,11 +1060,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def ship_conversion_upgrade(
@@ -1174,11 +1081,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # Unused in AoC
-
-        return patches
+        return []
 
     @staticmethod
     def spies_discount_upgrade(
@@ -1199,11 +1102,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def starting_food_upgrade(
@@ -1224,11 +1123,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def starting_wood_upgrade(
@@ -1249,11 +1144,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def starting_stone_upgrade(
@@ -1274,11 +1165,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def starting_gold_upgrade(
@@ -1299,11 +1186,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def starting_villagers_upgrade(
@@ -1324,11 +1207,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def starting_population_space_upgrade(
@@ -1350,8 +1229,6 @@ class AoCUpgradeResourceSubprocessor:
         :rtype: list
         """
         dataset = converter_group.data
-
-        patches = []
 
         obj_id = converter_group.get_id()
         if isinstance(converter_group, GenieTechEffectBundleGroup):
@@ -1410,9 +1287,7 @@ class AoCUpgradeResourceSubprocessor:
         converter_group.add_raw_api_object(nyan_patch_raw_api_object)
 
         wrapper_forward_ref = ForwardRef(converter_group, wrapper_ref)
-        patches.append(wrapper_forward_ref)
-
-        return patches
+        return [wrapper_forward_ref]
 
     @staticmethod
     def theocracy_upgrade(
@@ -1433,11 +1308,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def trade_penalty_upgrade(
@@ -1458,11 +1329,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def tribute_inefficiency_upgrade(
@@ -1483,11 +1350,7 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def wonder_time_increase_upgrade(
@@ -1508,8 +1371,4 @@ class AoCUpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []

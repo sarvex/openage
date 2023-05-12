@@ -69,10 +69,7 @@ def get_dir(which):
     # fetch the directory template
     env_var, (default_template, required_envs) = platform_table[which]
 
-    # then create the result from the environment
-    env_val = os.environ.get(env_var)
-
-    if env_val:
+    if env_val := os.environ.get(env_var):
         path = env_val
 
     elif default_template:

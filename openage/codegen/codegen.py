@@ -86,9 +86,7 @@ class CodegenDirWrapper(Wrapper):
         Returns an iterable of all path component tuples for files that have
         been read.
         """
-        for parts in self.reads:
-            yield parts
-
+        yield from self.reads
         self.reads.clear()
 
     def get_writes(self) -> None:
@@ -227,14 +225,9 @@ def get_codegen_depends(outputwrapper: CodegenDirWrapper) -> Generator[str, None
         if module.__package__ == '':
             continue
 
-        if not filename.endswith('.py'):
-            # This usually means that some .so file is imported as module.
-            # This is not a problem as long as it's not "our" .so file.
-            # => just handle non-openage non-.py files normally
-
-            if 'openage' in module.__name__:
-                print("codegeneration depends on non-.py module " + filename)
-                sys.exit(1)
+        if not filename.endswith('.py') and 'openage' in module.__name__:
+            print(f"codegeneration depends on non-.py module {filename}")
+            sys.exit(1)
 
         yield filename
 
@@ -281,7 +274,7 @@ def postprocess_write(parts, data: str) -> str:
     headerlines = []
     for line in get_header_lines():
         if line:
-            headerlines.append(comment_prefix + " " + line)
+            headerlines.append(f"{comment_prefix} {line}")
         else:
             headerlines.append("")
 

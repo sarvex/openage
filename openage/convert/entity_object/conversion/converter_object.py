@@ -51,7 +51,7 @@ class ConverterObject:
                 self.members = members
 
             elif all(isinstance(member, ValueMember) for member in members.values()):
-                self.members.update(members)
+                self.members |= members
 
             else:
                 raise Exception("members must be an instance of ValueMember")
@@ -112,7 +112,7 @@ class ConverterObject:
             member_diff = member.diff(other.get_member(member_id))
 
             if not isinstance(member_diff, NoDiffMember):
-                obj_diff.update({member_id: member_diff})
+                obj_diff[member_id] = member_diff
 
         return ConverterObject(f"{self.obj_id}-{other.get_id()}-sdiff", members=obj_diff)
 
@@ -123,11 +123,10 @@ class ConverterObject:
         if type(self) is not type(other):
             raise Exception(f"type {type(self)} cannot be diffed with type {type(other)}")
 
-        obj_diff = {}
-
-        for member_id, member in self.members.items():
-            obj_diff.update({member_id: member.diff(other.get_member(member_id))})
-
+        obj_diff = {
+            member_id: member.diff(other.get_member(member_id))
+            for member_id, member in self.members.items()
+        }
         return ConverterObject(f"{self.obj_id}-{other.get_id()}-diff", members=obj_diff)
 
     def __getitem__(self, key):
@@ -410,10 +409,10 @@ class RawAPIObject:
         """
         for raw_member in self.raw_members:
             member_name = raw_member[0]
-            member_value = raw_member[1]
             member_origin = raw_member[2]
 
             if name == member_name and member_origin == origin:
+                member_value = raw_member[1]
                 member_value.extend(push_value)
                 break
 
@@ -425,10 +424,7 @@ class RawAPIObject:
         """
         Create the nyan object for this raw API object. Members have to be created separately.
         """
-        parents = []
-        for raw_parent in self.raw_parents:
-            parents.append(self.api_ref[raw_parent])
-
+        parents = [self.api_ref[raw_parent] for raw_parent in self.raw_parents]
         if self.is_patch():
             self.nyan_object = NyanPatch(self.name, parents)
 
@@ -600,12 +596,7 @@ class RawAPIObject:
         if isinstance(value, CombinedSound):
             return value.get_relative_file_location()
 
-        if isinstance(value, float):
-            # Round floats to 6 decimal places for increased readability
-            # should have no effect on balance, hopefully
-            return round(value, ndigits=6)
-
-        return value
+        return round(value, ndigits=6) if isinstance(value, float) else value
 
     def _resolve_raw_values(self, values):
         """
@@ -616,23 +607,12 @@ class RawAPIObject:
         :return: Value usable by a nyan object or nyan member.
         """
         if isinstance(values, list):
-            # Sets or orderedsets
-            temp_values = []
-            for temp_value in values:
-                temp_values.append(self._resolve_raw_value(temp_value))
-
-            return temp_values
-
+            return [self._resolve_raw_value(temp_value) for temp_value in values]
         if isinstance(values, dict):
-            # Dicts
-            temp_values = {}
-            for key, val in values.items():
-                temp_values.update({
-                    self._resolve_raw_value(key): self._resolve_raw_value(val)
-                })
-
-            return temp_values
-
+            return {
+                self._resolve_raw_value(key): self._resolve_raw_value(val)
+                for key, val in values.items()
+            }
         return self._resolve_raw_value(values)
 
     def __repr__(self):

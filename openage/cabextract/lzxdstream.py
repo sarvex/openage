@@ -70,12 +70,12 @@ class LZXDStream(ReadOnlyFileLikeObject):
             size = INF
 
         while len(self.buf) < size:
-            data = self.decompressor.decompress_next_frame()
-            if not data:
+            if data := self.decompressor.decompress_next_frame():
+                self.buf.append(data)
+
+            else:
                 # EOF; return all we have
                 return self.buf.popleft(len(self.buf))
-
-            self.buf.append(data)
 
         return self.buf.popleft(size)
 

@@ -42,11 +42,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def burgundian_vineyards_upgrade(
@@ -67,11 +63,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def cliff_attack_upgrade(
@@ -92,11 +84,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def conversion_min_adjustment_upgrade(
@@ -119,11 +107,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def conversion_max_adjustment_upgrade(
@@ -146,11 +130,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def conversion_min_building_upgrade(
@@ -173,11 +153,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def conversion_max_building_upgrade(
@@ -200,11 +176,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def conversion_building_chance_upgrade(
@@ -227,11 +199,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def cuman_tc_upgrade(
@@ -252,11 +220,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def current_food_amount_upgrade(
@@ -279,11 +243,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def current_wood_amount_upgrade(
@@ -306,11 +266,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def current_stone_amount_upgrade(
@@ -333,11 +289,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def current_gold_amount_upgrade(
@@ -360,11 +312,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def doi_paper_money_upgrade(
@@ -385,11 +333,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def elevation_attack_upgrade(
@@ -410,11 +354,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def feitoria_gold_upgrade(
@@ -435,11 +375,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement all resources
-
-        return patches
+        return []
 
     @staticmethod
     def first_crusade_upgrade(
@@ -460,11 +396,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def fish_trap_food_amount_upgrade(
@@ -487,11 +419,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def folwark_collect_upgrade(
@@ -514,11 +442,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def folwark_flag_upgrade(
@@ -541,11 +465,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def folwark_mill_id_upgrade(
@@ -568,11 +488,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def free_kipchaks_upgrade(
@@ -593,11 +509,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def herdable_garrison_upgrade(
@@ -618,11 +530,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def relic_food_production_upgrade(
@@ -643,11 +551,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def reveal_enemy_tcs_upgrade(
@@ -670,11 +574,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def sheep_food_amount_upgrade(
@@ -695,11 +595,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def stone_gold_gen_upgrade(
@@ -720,11 +616,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def trade_food_bonus_upgrade(
@@ -745,11 +637,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def workshop_food_gen_upgrade(
@@ -770,11 +658,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def workshop_wood_gen_upgrade(
@@ -795,11 +679,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def workshop_stone_gen_upgrade(
@@ -820,11 +700,7 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def workshop_gold_gen_upgrade(
@@ -845,8 +721,4 @@ class DE2UpgradeResourceSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []

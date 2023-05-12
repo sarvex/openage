@@ -114,7 +114,7 @@ def main(args, error):
     """ Codegen CLI entry point. """
 
     if args.file_to_touch and not os.path.isfile(args.file_to_touch):
-        error("file doesn't exist: " + args.file_to_touch)
+        error(f"file doesn't exist: {args.file_to_touch}")
 
     def read_cache_file_lines(filename):
         """
@@ -148,12 +148,22 @@ def main(args, error):
     def print_set_differences(old, new, name):
         """ Prints the difference between old and new. """
         if old - new:
-            print("codegen: removed from " + name + ":\n"
-                  "\t" + "\n\t".join(old - new) + "\n")
+            print(
+                (
+                    (f"codegen: removed from {name}" + ":\n" "\t")
+                    + "\n\t".join(old - new)
+                    + "\n"
+                )
+            )
 
         if new - old and old:
-            print("codegen: new " + name + ":\n"
-                  "\t" + "\n\t".join(new - old) + "\n")
+            print(
+                (
+                    (f"codegen: new {name}" + ":\n" "\t")
+                    + "\n\t".join(new - old)
+                    + "\n"
+                )
+            )
 
     print_set_differences(old_generated, generated, "generated files")
     print_set_differences(old_depends, depends, "dependencies")
@@ -164,17 +174,20 @@ def main(args, error):
     with open(args.depend_list_file, 'w', encoding='utf8') as fileobj:
         fileobj.write('\n'.join(depends))
 
-    if args.file_to_touch:
-        if old_generated != generated or old_depends != depends:
-            os.utime(args.file_to_touch)
+    if args.file_to_touch and (
+        old_generated != generated or old_depends != depends
+    ):
+        os.utime(args.file_to_touch)
 
-    if args.force_rerun_on_generated_list_change:
-        if old_generated != generated:
-            print("\n\n\n\n"
-                  "The list of generated source files has changed.\n"
-                  "A build update has been triggered; you need to build "
-                  "again.\n"
-                  "\n\n\n")
+    if (
+        args.force_rerun_on_generated_list_change
+        and old_generated != generated
+    ):
+        print("\n\n\n\n"
+              "The list of generated source files has changed.\n"
+              "A build update has been triggered; you need to build "
+              "again.\n"
+              "\n\n\n")
 
-            # fail
-            sys.exit(1)
+        # fail
+        sys.exit(1)

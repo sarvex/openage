@@ -104,11 +104,10 @@ def process_args(args, error):
     if args.only_changed_files and not all((has_git, is_git_repo)):
         error("can not check only changed files: git is required")
 
-    if args.authors:
-        if not all((has_git, is_git_repo)):
-            # non-fatal fail
-            print("can not check author list for compliance: git is required")
-            args.authors = False
+    if args.authors and not all((has_git, is_git_repo)):
+        # non-fatal fail
+        print("can not check author list for compliance: git is required")
+        args.authors = False
 
     if args.test_git_change_years:
         if not args.legal:
@@ -117,16 +116,16 @@ def process_args(args, error):
         if not all((has_git, is_git_repo)):
             error("--test-git-change-years requires git")
 
-    if args.pystyle:
-        if not importlib.util.find_spec('pep8') and \
-           not importlib.util.find_spec('pycodestyle'):
+    if (
+        args.pystyle
+        and not importlib.util.find_spec('pep8')
+        and not importlib.util.find_spec('pycodestyle')
+    ):
+        error("pep8 or pycodestyle python module "
+              "required for style checking")
 
-            error("pep8 or pycodestyle python module "
-                  "required for style checking")
-
-    if args.pylint:
-        if not importlib.util.find_spec('pylint'):
-            error("pylint python module required for linting")
+    if args.pylint and not importlib.util.find_spec('pylint'):
+        error("pylint python module required for linting")
 
 
 def get_changed_files(gitref):

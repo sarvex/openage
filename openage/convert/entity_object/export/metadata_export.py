@@ -72,8 +72,7 @@ class SpriteMetadataExport(MetadataExport):
         """
         sprite_file = SpriteMetadata(self.targetdir, self.filename)
 
-        tex_index = 0
-        for img_filename, metadata in self.graphics_metadata.items():
+        for tex_index, (img_filename, metadata) in enumerate(self.graphics_metadata.items()):
             tex_filename = metadata[0]
             sprite_file.add_texture(tex_index, tex_filename)
             sprite_file.add_layer(tex_index, *metadata[1:5])
@@ -89,10 +88,9 @@ class SpriteMetadataExport(MetadataExport):
             degree_step = 360 / angle_count
             for angle_index in range(angle_count):
                 mirror_from = None
-                if mirror_mode:
-                    if degree > 180:
-                        mirrored_angle = (angle_index - angle_count) * (-1)
-                        mirror_from = int(mirrored_angle * degree_step)
+                if mirror_mode and degree > 180:
+                    mirrored_angle = (angle_index - angle_count) * (-1)
+                    mirror_from = int(mirrored_angle * degree_step)
 
                 sprite_file.add_angle(int(degree), mirror_from)
 
@@ -112,8 +110,6 @@ class SpriteMetadataExport(MetadataExport):
                         )
 
                 degree += degree_step
-
-            tex_index += 1
 
         return sprite_file.dump()
 

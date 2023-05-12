@@ -36,16 +36,14 @@ class AoCModifierSubprocessor:
         :rtype: list
         """
         dataset = converter_obj_group.data
-        modifiers = [
+        return [
             dataset.pregen_nyan_objects[
                 "util.modifier.elevation_difference.AttackHigh"
             ].get_nyan_object(),
             dataset.pregen_nyan_objects[
                 "util.modifier.elevation_difference.AttackLow"
-            ].get_nyan_object()
+            ].get_nyan_object(),
         ]
-
-        return modifiers
 
     @staticmethod
     def flyover_effect_modifier(converter_obj_group: GenieGameEntityGroup) -> NyanObject:
@@ -58,11 +56,9 @@ class AoCModifierSubprocessor:
         :rtype: ...dataformat.forward_ref.ForwardRef
         """
         dataset = converter_obj_group.data
-        modifier = dataset.pregen_nyan_objects[
+        return dataset.pregen_nyan_objects[
             "util.modifier.flyover_cliff.AttackFlyover"
         ].get_nyan_object()
-
-        return modifier
 
     @staticmethod
     def gather_rate_modifier(converter_obj_group: GenieGameEntityGroup) -> list[ForwardRef]:
@@ -115,7 +111,7 @@ class AoCModifierSubprocessor:
                     unit_id = command["unit_id"].value
 
                     entity_lines = {}
-                    entity_lines.update(dataset.unit_lines)
+                    entity_lines |= dataset.unit_lines
                     entity_lines.update(dataset.building_lines)
                     entity_lines.update(dataset.ambient_groups)
                     entity_lines.update(dataset.variant_groups)
@@ -124,21 +120,21 @@ class AoCModifierSubprocessor:
                         lines = [entity_lines[unit_id]]
 
                     elif class_id != -1:
-                        lines = []
-                        for line in entity_lines.values():
-                            if line.get_class_id() == class_id:
-                                lines.append(line)
-
+                        lines = [
+                            line
+                            for line in entity_lines.values()
+                            if line.get_class_id() == class_id
+                        ]
                     else:
                         raise Exception("Gather task has no valid target ID.")
 
                     # Create a modifier for each matching resource spot
                     for resource_line in lines:
                         head_unit_id = resource_line.get_head_unit_id()
-                        if isinstance(resource_line, GenieBuildingLineGroup):
-                            resource_line_name = name_lookup_dict[head_unit_id][0]
-
-                        elif isinstance(resource_line, GenieAmbientGroup):
+                        if isinstance(
+                            resource_line,
+                            (GenieBuildingLineGroup, GenieAmbientGroup),
+                        ):
                             resource_line_name = name_lookup_dict[head_unit_id][0]
 
                         elif isinstance(resource_line, GenieVariantGroup):
@@ -210,6 +206,4 @@ class AoCModifierSubprocessor:
 
         converter_obj_group.add_raw_api_object(modifier_raw_api_object)
 
-        modifier_forward_ref = ForwardRef(converter_obj_group, modifier_raw_api_object.get_id())
-
-        return modifier_forward_ref
+        return ForwardRef(converter_obj_group, modifier_raw_api_object.get_id())

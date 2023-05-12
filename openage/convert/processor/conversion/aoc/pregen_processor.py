@@ -475,10 +475,11 @@ class AoCPregenSubprocessor:
         # =======================================================================
         repairable_lines = []
         repairable_lines.extend(full_data_set.building_lines.values())
-        for unit_line in full_data_set.unit_lines.values():
-            if unit_line.is_repairable():
-                repairable_lines.append(unit_line)
-
+        repairable_lines.extend(
+            unit_line
+            for unit_line in full_data_set.unit_lines.values()
+            if unit_line.is_repairable()
+        )
         for repairable_line in repairable_lines:
             game_entity_name = name_lookup_dict[repairable_line.get_head_unit_id()][0]
 

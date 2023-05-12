@@ -35,13 +35,10 @@ class MediaCacheFile(DataDefinition):
         """
         Returns the media cache file content in TOML format.
         """
-        output_dict = {}
-
-        output_dict["file_version"] = FILE_VERSION
-        output_dict["hash_algo"] = self.hash_func
+        output_dict = {"file_version": FILE_VERSION, "hash_algo": self.hash_func}
 
         for media_type, cachedata in self.cache.items():
-            output_dict.update({media_type.value: {}})
+            output_dict[media_type.value] = {}
 
             for idx, cache in enumerate(cachedata):
                 cache_table = output_dict[media_type.value]

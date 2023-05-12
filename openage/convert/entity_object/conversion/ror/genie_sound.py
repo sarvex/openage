@@ -24,10 +24,7 @@ class RoRSound(GenieSound):
         """
         sound_ids = []
         sound_items = self["sound_items"].value
-        for item in sound_items:
-            sound_id = item["resource_id"].value
-            sound_ids.append(sound_id)
-
+        sound_ids.extend(item["resource_id"].value for item in sound_items)
         return sound_ids
 
     def __repr__(self):

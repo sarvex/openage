@@ -59,11 +59,9 @@ class AoCAuxiliarySubprocessor:
         train_location_id = line.get_train_location_id()
         if isinstance(line, GenieBuildingLineGroup):
             train_location = dataset.unit_lines[train_location_id]
-            train_location_name = name_lookup_dict[train_location_id][0]
-
         else:
             train_location = dataset.building_lines[train_location_id]
-            train_location_name = name_lookup_dict[train_location_id][0]
+        train_location_name = name_lookup_dict[train_location_id][0]
 
         # Location of the object depends on whether it'a a unique unit or a normal unit
         if line.is_unique():
@@ -250,15 +248,13 @@ class AoCAuxiliarySubprocessor:
 
             if file_id in dataset.combined_sounds:
                 creation_sound = dataset.combined_sounds[file_id]
-                creation_sound.add_reference(sound_raw_api_object)
-
             else:
                 creation_sound = CombinedSound(creation_sound_id,
                                                file_id,
                                                f"creation_sound_{creation_sound_id}",
                                                dataset)
                 dataset.combined_sounds.update({file_id: creation_sound})
-                creation_sound.add_reference(sound_raw_api_object)
+            creation_sound.add_reference(sound_raw_api_object)
 
             creation_sounds.append(creation_sound)
 
@@ -590,7 +586,7 @@ class AoCAuxiliarySubprocessor:
         tech_lookup_dict = internal_name_lookups.get_tech_lookups(dataset.game_version)
 
         if not top_level and\
-            (tech_id in dataset.initiated_techs.keys() or
+                (tech_id in dataset.initiated_techs.keys() or
              (tech_id in dataset.tech_groups.keys() and
               dataset.tech_groups[tech_id].is_researchable())):
             # The tech condition is a building or a researchable tech
@@ -720,7 +716,7 @@ class AoCAuxiliarySubprocessor:
 
                 relevant_ids.append(required_tech_id)
 
-            if len(relevant_ids) == 0:
+            if not relevant_ids:
                 return []
 
             if len(relevant_ids) == 1:

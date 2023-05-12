@@ -48,11 +48,7 @@ class DE2UpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def regeneration_rate_upgrade(
@@ -78,11 +74,7 @@ class DE2UpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []
 
     @staticmethod
     def villager_pop_space_upgrade(
@@ -108,8 +100,4 @@ class DE2UpgradeAttributeSubprocessor:
         :returns: The forward references for the generated patches.
         :rtype: list
         """
-        patches = []
-
-        # TODO: Implement
-
-        return patches
+        return []

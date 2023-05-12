@@ -44,9 +44,8 @@ def find_issues(dirnames, exts):
         if data and not data.endswith('\n'):
             yield "File does not end in '\\n'", filename, None
 
-        if has_ext(filename, ('.py', '.pyx', '.pxd')):
-            if '\t' in data:
-                yield "File contains tabs", filename, None
+        if has_ext(filename, ('.py', '.pyx', '.pxd')) and '\t' in data:
+            yield "File contains tabs", filename, None
 
         if TRAIL_WHITESPACE_RE.search(data) or IMMEDIATE_TODO_RE.search(data):
             analyse_each_line = True
@@ -67,13 +66,11 @@ def find_issues_with_lines(filename):
 
     for num, line in enumerate(data.splitlines(True), start=1):
 
-        match = TRAIL_WHITESPACE_RE.search(line)
-        if match:
+        if match := TRAIL_WHITESPACE_RE.search(line):
             yield issue_str_line("Trailing whitespace", filename, line, num,
                                  (match.start(1), match.end(1)))
 
-        match = IMMEDIATE_TODO_RE.search(line)
-        if match:
+        if match := IMMEDIATE_TODO_RE.search(line):
             yield issue_str_line("Found 'as"
                                  "df', indicating an immediate TODO",
                                  filename, line, num,

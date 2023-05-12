@@ -253,7 +253,7 @@ class DE2TechSubprocessor:
         affected_entities = []
         if unit_id != -1:
             entity_lines = {}
-            entity_lines.update(dataset.unit_lines)
+            entity_lines |= dataset.unit_lines
             entity_lines.update(dataset.building_lines)
             entity_lines.update(dataset.ambient_groups)
 
@@ -267,14 +267,15 @@ class DE2TechSubprocessor:
 
         elif class_id != -1:
             entity_lines = {}
-            entity_lines.update(dataset.unit_lines)
+            entity_lines |= dataset.unit_lines
             entity_lines.update(dataset.building_lines)
             entity_lines.update(dataset.ambient_groups)
 
-            for line in entity_lines.values():
-                if line.get_class_id() == class_id:
-                    affected_entities.append(line)
-
+            affected_entities.extend(
+                line
+                for line in entity_lines.values()
+                if line.get_class_id() == class_id
+            )
         else:
             return patches
 
@@ -300,12 +301,7 @@ class DE2TechSubprocessor:
         if effect_type in (1, 11):
             mode = effect["attr_b"].value
 
-            if mode == 0:
-                operator = MemberOperator.ASSIGN
-
-            else:
-                operator = MemberOperator.ADD
-
+            operator = MemberOperator.ASSIGN if mode == 0 else MemberOperator.ADD
         elif effect_type in (6, 16):
             operator = MemberOperator.MULTIPLY
 

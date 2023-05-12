@@ -61,12 +61,7 @@ def convert_assets(
 
     # Set verbosity for debug output
     if "debug_info" not in vars(args) or not args.debug_info:
-        if args.devmode:
-            args.debug_info = 3
-
-        else:
-            args.debug_info = 0
-
+        args.debug_info = 3 if args.devmode else 0
     # add a dir for debug info
     debug_log_path = converted_path / "debug" / datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     debugdir = DirectoryCreator(debug_log_path).root

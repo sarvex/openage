@@ -216,7 +216,7 @@ class AoCTechSubprocessor:
         affected_entities = []
         if unit_id != -1:
             entity_lines = {}
-            entity_lines.update(dataset.unit_lines)
+            entity_lines |= dataset.unit_lines
             entity_lines.update(dataset.building_lines)
             entity_lines.update(dataset.ambient_groups)
 
@@ -230,14 +230,15 @@ class AoCTechSubprocessor:
 
         elif class_id != -1:
             entity_lines = {}
-            entity_lines.update(dataset.unit_lines)
+            entity_lines |= dataset.unit_lines
             entity_lines.update(dataset.building_lines)
             entity_lines.update(dataset.ambient_groups)
 
-            for line in entity_lines.values():
-                if line.get_class_id() == class_id:
-                    affected_entities.append(line)
-
+            affected_entities.extend(
+                line
+                for line in entity_lines.values()
+                if line.get_class_id() == class_id
+            )
         else:
             return patches
 
@@ -263,12 +264,7 @@ class AoCTechSubprocessor:
         if effect_type in (1, 11):
             mode = effect["attr_b"].value
 
-            if mode == 0:
-                operator = MemberOperator.ASSIGN
-
-            else:
-                operator = MemberOperator.ADD
-
+            operator = MemberOperator.ASSIGN if mode == 0 else MemberOperator.ADD
         elif effect_type in (6, 16):
             operator = MemberOperator.MULTIPLY
 
@@ -441,12 +437,7 @@ class AoCTechSubprocessor:
             # Skip patch generation if no matching resource cost was found
             return patches
 
-        if mode == 0:
-            operator = MemberOperator.ASSIGN
-
-        else:
-            operator = MemberOperator.ADD
-
+        operator = MemberOperator.ASSIGN if mode == 0 else MemberOperator.ADD
         patch_target_ref = f"{tech_name}.ResearchableTech.{tech_name}Cost.{resource_name}Amount"
         patch_target_forward_ref = ForwardRef(tech_group, patch_target_ref)
 
@@ -532,12 +523,7 @@ class AoCTechSubprocessor:
         tech_group = dataset.tech_groups[tech_id]
         tech_name = tech_lookup_dict[tech_id][0]
 
-        if mode == 0:
-            operator = MemberOperator.ASSIGN
-
-        else:
-            operator = MemberOperator.ADD
-
+        operator = MemberOperator.ASSIGN if mode == 0 else MemberOperator.ADD
         patch_target_ref = f"{tech_name}.ResearchableTech"
         patch_target_forward_ref = ForwardRef(tech_group, patch_target_ref)
 

@@ -103,7 +103,7 @@ class AoCModpackSubprocessor:
             else:
                 nyan_file = NyanFile(obj_location, obj_filename,
                                      modpack.name)
-                created_nyan_files.update({nyan_file.get_relative_file_path(): nyan_file})
+                created_nyan_files[nyan_file.get_relative_file_path()] = nyan_file
                 modpack.add_data_export(nyan_file)
 
             nyan_file.add_nyan_object(raw_api_object.get_nyan_object())
@@ -282,44 +282,43 @@ class AoCModpackSubprocessor:
         # Aliases for objects from the modpack itself
 
         # Prefix aliases to prevent naming conflucts with 'engine'
-        prefix = modpack.name + "_"
+        prefix = f"{modpack.name}_"
 
         # Auxiliary objects
         import_tree.add_alias(
             (modpack.name, "data", "util", "attribute", "types"),
-            prefix + "attribute"
+            f"{prefix}attribute",
         )
         import_tree.add_alias(
             (modpack.name, "data", "util", "attribute_change_type", "types"),
-            prefix + "attr_change_type"
+            f"{prefix}attr_change_type",
         )
         import_tree.add_alias(
             (modpack.name, "data", "util", "construct_type", "types"),
-            prefix + "construct_type"
+            f"{prefix}construct_type",
         )
         import_tree.add_alias(
             (modpack.name, "data", "util", "convert_type", "types"),
-            prefix + "convert_type"
+            f"{prefix}convert_type",
         )
         import_tree.add_alias(
             (modpack.name, "data", "util", "diplomatic_stance", "types"),
-            prefix + "diplo_stance"
+            f"{prefix}diplo_stance",
         )
         import_tree.add_alias(
             (modpack.name, "data", "util", "game_entity_type", "types"),
-            prefix + "ge_type"
+            f"{prefix}ge_type",
         )
         import_tree.add_alias(
             (modpack.name, "data", "util", "formation", "types"),
-            prefix + "formation"
+            f"{prefix}formation",
         )
         import_tree.add_alias(
             (modpack.name, "data", "util", "formation", "subformations"),
-            prefix + "subformations"
+            f"{prefix}subformations",
         )
         import_tree.add_alias(
-            (modpack.name, "data", "util", "language", "language"),
-            prefix + "lang"
+            (modpack.name, "data", "util", "language", "language"), f"{prefix}lang"
         )
         import_tree.add_alias(
             (modpack.name, "data", "util", "logic", "death", "death", "StandardHealthDeathLiteral"),
@@ -332,15 +331,15 @@ class AoCModpackSubprocessor:
         )
         import_tree.add_alias(
             (modpack.name, "data", "util", "resource", "market_trading"),
-            prefix + "market_trading"
+            f"{prefix}market_trading",
         )
         import_tree.add_alias(
             (modpack.name, "data", "util", "resource", "types"),
-            prefix + "resource"
+            f"{prefix}resource",
         )
         import_tree.add_alias(
             (modpack.name, "data", "util", "terrain_type", "types"),
-            prefix + "terrain_type"
+            f"{prefix}terrain_type",
         )
 
         # Effect objects
@@ -360,31 +359,65 @@ class AoCModpackSubprocessor:
             "min_heal"
         )
         import_tree.add_alias(
-            (modpack.name, "data", "resistance", "discrete", "flat_attribute_change"),
-            prefix + "rdisc_flac"
+            (
+                modpack.name,
+                "data",
+                "resistance",
+                "discrete",
+                "flat_attribute_change",
+            ),
+            f"{prefix}rdisc_flac",
         )
 
         # Modifier objects
         import_tree.add_alias(
-            (modpack.name, "data", "util", "modifier", "elevation_difference",
-             "elevation_difference", "AttackMultiplierHigh"),
-            prefix + "mme_elev_high"
+            (
+                modpack.name,
+                "data",
+                "util",
+                "modifier",
+                "elevation_difference",
+                "elevation_difference",
+                "AttackMultiplierHigh",
+            ),
+            f"{prefix}mme_elev_high",
         )
         import_tree.add_alias(
-            (modpack.name, "data", "util", "modifier", "elevation_difference",
-             "elevation_difference", "AttackMultiplierLow"),
-            prefix + "mme_elev_low"
+            (
+                modpack.name,
+                "data",
+                "util",
+                "modifier",
+                "elevation_difference",
+                "elevation_difference",
+                "AttackMultiplierLow",
+            ),
+            f"{prefix}mme_elev_low",
         )
         import_tree.add_alias(
-            (modpack.name, "data", "util", "modifier", "flyover_cliff",
-             "flyover_cliff", "AttackMultiplierFlyover"),
-            prefix + "mme_cliff_attack"
+            (
+                modpack.name,
+                "data",
+                "util",
+                "modifier",
+                "flyover_cliff",
+                "flyover_cliff",
+                "AttackMultiplierFlyover",
+            ),
+            f"{prefix}mme_cliff_attack",
         )
 
         # Terrain objects
         import_tree.add_alias(
-            (modpack.name, "data", "terrain", "foundation", "foundation", "Foundation"),
-            prefix + "foundation"
+            (
+                modpack.name,
+                "data",
+                "terrain",
+                "foundation",
+                "foundation",
+                "Foundation",
+            ),
+            f"{prefix}foundation",
         )
 
         # Generic aliases
@@ -431,7 +464,7 @@ class AoCModpackSubprocessor:
             current_node = child
 
             # These are folders and should have unique names
-            alias_name = "tech_" + current_node.name
+            alias_name = f"tech_{current_node.name}"
 
             # Two levels deeper: This should be a nyan object
             current_node = list(current_node.children[current_node.name].children.values())[0]
@@ -448,7 +481,7 @@ class AoCModpackSubprocessor:
             current_node = child
 
             # These are folders and should have unique names
-            alias_name = "civ_" + current_node.name
+            alias_name = f"civ_{current_node.name}"
 
             # Two levels deeper: This should be a nyan object
             current_node = list(current_node.children[current_node.name].children.values())[0]
@@ -465,7 +498,7 @@ class AoCModpackSubprocessor:
             current_node = child
 
             # These are folders and should have unique names
-            alias_name = "terrain_" + current_node.name
+            alias_name = f"terrain_{current_node.name}"
 
             # Two levels deeper: This should be a nyan object
             current_node = list(current_node.children[current_node.name].children.values())[0]

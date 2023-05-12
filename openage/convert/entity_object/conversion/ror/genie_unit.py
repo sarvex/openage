@@ -72,10 +72,7 @@ class RoRUnitLineGroup(GenieUnitLineGroup):
         :returns: The garrison mode of the line.
         :rtype: GenieGarrisonMode
         """
-        if self.has_command(12):
-            return GenieGarrisonMode.TRANSPORT
-
-        return None
+        return GenieGarrisonMode.TRANSPORT if self.has_command(12) else None
 
     def get_enabling_research_id(self) -> int:
         return self.enabling_research_id
@@ -251,10 +248,7 @@ class RoRUnitTaskGroup(GenieUnitTaskGroup):
         :returns: The garrison mode of the line.
         :rtype: GenieGarrisonMode
         """
-        if self.has_command(12):
-            return GenieGarrisonMode.TRANSPORT
-
-        return None
+        return GenieGarrisonMode.TRANSPORT if self.has_command(12) else None
 
     def get_enabling_research_id(self) -> int:
         return self.enabling_research_id

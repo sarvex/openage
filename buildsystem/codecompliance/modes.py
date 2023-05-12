@@ -4,6 +4,7 @@
 Checks the mode of all files and prevents executable source files.
 """
 
+
 import re
 import pathlib
 import stat
@@ -11,7 +12,7 @@ import stat
 from .util import findfiles, SHEBANG
 
 
-SHEBANG_RE = re.compile("^" + SHEBANG)
+SHEBANG_RE = re.compile(f"^{SHEBANG}")
 
 EXTENSIONS_NO_X_BIT = {
     '.h', '.cpp', '.py', '.pyx', '.pxi', '.cmake', '.h.in',

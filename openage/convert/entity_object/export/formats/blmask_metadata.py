@@ -84,11 +84,7 @@ class BlendmaskMetadata(DataDefinition):
         self.scalefactor = float(factor)
 
     def dump(self) -> str:
-        output_str = ""
-
-        # header
-        output_str += "# openage blendmask definition file\n\n"
-
+        output_str = "" + "# openage blendmask definition file\n\n"
         # version
         output_str += f"version {FORMAT_VERSION}\n\n"
 

@@ -217,9 +217,8 @@ class DE2NyanSubprocessor:
         # =======================================================================
         # Abilities
         # =======================================================================
-        abilities_set = []
+        abilities_set = [AoCAbilitySubprocessor.death_ability(unit_line)]
 
-        abilities_set.append(AoCAbilitySubprocessor.death_ability(unit_line))
         abilities_set.append(AoCAbilitySubprocessor.delete_ability(unit_line))
         abilities_set.append(AoCAbilitySubprocessor.despawn_ability(unit_line))
         abilities_set.append(AoCAbilitySubprocessor.idle_ability(unit_line))
@@ -239,9 +238,7 @@ class DE2NyanSubprocessor:
         if len(unit_line.creates) > 0:
             abilities_set.append(AoCAbilitySubprocessor.create_ability(unit_line))
 
-        # Config
-        ability = AoCAbilitySubprocessor.use_contingent_ability(unit_line)
-        if ability:
+        if ability := AoCAbilitySubprocessor.use_contingent_ability(unit_line):
             abilities_set.append(ability)
 
         if unit_line.get_head_unit_id() in (125, 692):
@@ -300,12 +297,12 @@ class DE2NyanSubprocessor:
                 abilities_set.append(AoCAbilitySubprocessor.collect_storage_ability(unit_line))
 
         if len(unit_line.garrison_locations) > 0:
-            ability = AoCAbilitySubprocessor.enter_container_ability(unit_line)
-            if ability:
+            if ability := AoCAbilitySubprocessor.enter_container_ability(
+                unit_line
+            ):
                 abilities_set.append(ability)
 
-            ability = AoCAbilitySubprocessor.exit_container_ability(unit_line)
-            if ability:
+            if ability := AoCAbilitySubprocessor.exit_container_ability(unit_line):
                 abilities_set.append(ability)
 
         if isinstance(unit_line, GenieMonkGroup):
@@ -428,9 +425,10 @@ class DE2NyanSubprocessor:
         # =======================================================================
         # Abilities
         # =======================================================================
-        abilities_set = []
+        abilities_set = [
+            AoCAbilitySubprocessor.attribute_change_tracker_ability(building_line)
+        ]
 
-        abilities_set.append(AoCAbilitySubprocessor.attribute_change_tracker_ability(building_line))
         abilities_set.append(AoCAbilitySubprocessor.death_ability(building_line))
         abilities_set.append(AoCAbilitySubprocessor.delete_ability(building_line))
         abilities_set.append(AoCAbilitySubprocessor.despawn_ability(building_line))
@@ -450,7 +448,7 @@ class DE2NyanSubprocessor:
             abilities_set.append(AoCAbilitySubprocessor.constructable_ability(building_line))
 
         if building_line.is_passable() or\
-                (isinstance(building_line, GenieStackBuildingGroup) and building_line.is_gate()):
+                    (isinstance(building_line, GenieStackBuildingGroup) and building_line.is_gate()):
             abilities_set.append(AoCAbilitySubprocessor.passable_ability(building_line))
 
         if building_line.has_foundation():
@@ -498,8 +496,9 @@ class DE2NyanSubprocessor:
         if building_line.is_dropsite():
             abilities_set.append(AoCAbilitySubprocessor.drop_site_ability(building_line))
 
-        ability = AoCAbilitySubprocessor.provide_contingent_ability(building_line)
-        if ability:
+        if ability := AoCAbilitySubprocessor.provide_contingent_ability(
+            building_line
+        ):
             abilities_set.append(ability)
 
         # Trade abilities
